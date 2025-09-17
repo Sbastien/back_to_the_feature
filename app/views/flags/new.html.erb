@@ -1,0 +1,81 @@
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Create New Flag</h2>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <%= form_with model: @flag, local: true, class: "space-y-6" do |form| %>
+      <% if @flag.errors.any? %>
+        <div class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                There were errors with your submission:
+              </h3>
+              <div class="mt-2 text-sm text-red-700">
+                <ul class="list-disc pl-5 space-y-1">
+                  <% @flag.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+        <div class="md:grid md:grid-cols-3 md:gap-6">
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Basic Information</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Basic details about your feature flag.
+            </p>
+          </div>
+          <div class="mt-5 md:mt-0 md:col-span-2">
+            <div class="grid grid-cols-6 gap-6">
+              <div class="col-span-6">
+                <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
+                <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+
+              <div class="col-span-6">
+                <%= form.label :description, class: "block text-sm font-medium text-gray-700" %>
+                <%= form.text_area :description, rows: 3, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+        <div class="md:grid md:grid-cols-3 md:gap-6">
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Variants</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Define the variants for A/B testing. Weights should add up to 100.
+            </p>
+          </div>
+          <div class="mt-5 md:mt-0 md:col-span-2">
+            <div id="variants-container">
+              <% (@flag.variants || [{"name" => "A", "weight" => 50}, {"name" => "B", "weight" => 50}]).each_with_index do |variant, index| %>
+                <div class="flex items-center space-x-4 mb-4">
+                  <%= text_field_tag "flag[variants][#{index}][name]", variant["name"], placeholder: "Variant name", class: "focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                  <%= number_field_tag "flag[variants][#{index}][weight]", variant["weight"], placeholder: "Weight", min: 0, max: 100, class: "focus:ring-indigo-500 focus:border-indigo-500 block w-32 shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                  <span class="text-sm text-gray-500">%</span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <%= link_to "Cancel", flags_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= form.submit "Create Flag", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>

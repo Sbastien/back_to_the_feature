@@ -1,0 +1,94 @@
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="md:flex md:items-center md:justify-between">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Edit <%= @group.name %></h2>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <%= form_with model: @group, local: true, class: "space-y-6" do |form| %>
+      <% if @group.errors.any? %>
+        <div class="rounded-md bg-red-50 p-4">
+          <div class="flex">
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800">
+                There were errors with your submission:
+              </h3>
+              <div class="mt-2 text-sm text-red-700">
+                <ul class="list-disc pl-5 space-y-1">
+                  <% @group.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
+        <div class="md:grid md:grid-cols-3 md:gap-6">
+          <div class="md:col-span-1">
+            <h3 class="text-lg font-medium leading-6 text-gray-900">Group Information</h3>
+            <p class="mt-1 text-sm text-gray-500">
+              Define a group of users that can be targeted by feature flags.
+            </p>
+          </div>
+          <div class="mt-5 md:mt-0 md:col-span-2">
+            <div class="grid grid-cols-6 gap-6">
+              <div class="col-span-6">
+                <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
+                <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+              </div>
+
+              <div class="col-span-6">
+                <%= form.label :definition, "Definition", class: "block text-sm font-medium text-gray-700" %>
+                <%= form.text_area :definition, rows: 4, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
+                <p class="mt-2 text-sm text-gray-500">
+                  Define the logic that determines if a user belongs to this group.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
+        <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Example Definitions</h3>
+        <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
+          <p class="text-sm text-blue-800">
+            <strong>External Service:</strong> Groups evaluate user attributes sent by client applications via the API.
+            The client sends user data like <code>{"id": 123, "email": "user@company.com", "role": "admin"}</code>
+          </p>
+        </div>
+        <div class="space-y-3 text-sm">
+          <div>
+            <code class="bg-white px-2 py-1 rounded border">email.ends_with? "@company.com"</code>
+            <span class="ml-2 text-gray-600">Users with company email addresses</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded border">username.starts_with? "admin_"</code>
+            <span class="ml-2 text-gray-600">Users with admin usernames</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded border">role == "premium"</code>
+            <span class="ml-2 text-gray-600">Users with premium subscription</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded border">country == "US"</code>
+            <span class="ml-2 text-gray-600">Users from United States</span>
+          </div>
+          <div>
+            <code class="bg-white px-2 py-1 rounded border">id.in? [1, 2, 3, 4, 5]</code>
+            <span class="ml-2 text-gray-600">Specific user IDs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3">
+        <%= link_to "Cancel", groups_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= form.submit "Update Group", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>

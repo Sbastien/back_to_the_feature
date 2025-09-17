@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Watch for changes in app/views and app/assets/stylesheets and rebuild Tailwind
+echo "Starting Tailwind CSS watcher..."
+
+while true; do
+  # Build Tailwind
+  rails tailwindcss:build
+
+  # Watch for changes in view files and stylesheets
+  if command -v fswatch >/dev/null 2>&1; then
+    fswatch -o app/views app/assets/stylesheets | while read f; do
+      echo "Files changed, rebuilding Tailwind CSS..."
+      rails tailwindcss:build
+    done
+  else
+    echo "Note: Install 'fswatch' for automatic rebuilding on file changes"
+    echo "For now, run 'rails tailwindcss:build' manually when you change styles"
+    sleep 300  # Check every 5 minutes as fallback
+  fi
+done

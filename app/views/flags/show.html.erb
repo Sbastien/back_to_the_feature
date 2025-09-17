@@ -1,0 +1,92 @@
+<div class="px-4 sm:px-6 lg:px-8">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-xl font-semibold text-gray-900"><%= @flag.name %></h1>
+      <p class="mt-2 text-sm text-gray-700"><%= @flag.description %></p>
+    </div>
+    <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none space-x-3">
+      <%= link_to "Edit Flag", edit_flag_path(@flag), class: "inline-flex items-center justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+      <%= link_to "Add Rule", new_flag_rule_path(@flag), class: "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" %>
+    </div>
+  </div>
+
+  <!-- Variants -->
+  <div class="mt-8">
+    <h2 class="text-lg font-medium text-gray-900">Variants</h2>
+    <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <% @flag.variants.each do |variant| %>
+        <div class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm">
+          <div class="flex items-center space-x-3">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900"><%= variant["name"] %></p>
+              <p class="text-sm text-gray-500">Weight: <%= variant["weight"] %>%</p>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Rules -->
+  <div class="mt-8">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h2 class="text-lg font-medium text-gray-900">Rules</h2>
+        <p class="mt-1 text-sm text-gray-600">Rules are evaluated in order. The first matching rule determines the flag behavior.</p>
+      </div>
+    </div>
+    <div class="mt-4">
+      <% if @rules.any? %>
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead class="bg-gray-50">
+              <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
+                <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <% @rules.each do |rule| %>
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                      <%= rule.type.humanize %>
+                    </span>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <%= rule.value %>
+                    <% if rule.type == "percentage_of_actors" %>%<% end %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <%= time_ago_in_words(rule.created_at) %> ago
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <%= link_to "Edit", edit_flag_rule_path(@flag, rule), class: "text-indigo-600 hover:text-indigo-900 mr-3" %>
+                    <%= link_to "Delete", flag_rule_path(@flag, rule), method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-600 hover:text-red-900" %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% else %>
+        <div class="text-center py-12 border-2 border-dashed border-gray-300 rounded-lg">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No rules</h3>
+          <p class="mt-1 text-sm text-gray-500">Get started by creating a rule for this flag.</p>
+          <div class="mt-6">
+            <%= link_to "Add Rule", new_flag_rule_path(@flag), class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <%= link_to "← Back to flags", flags_path, class: "text-sm text-indigo-600 hover:text-indigo-500" %>
+  </div>
+</div>
