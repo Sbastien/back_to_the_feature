@@ -1,61 +1,214 @@
-<div class="px-4 sm:px-6 lg:px-8">
-  <div class="sm:flex sm:items-center">
-    <div class="sm:flex-auto">
-      <h1 class="text-xl font-semibold text-gray-900">Users</h1>
-      <p class="mt-2 text-sm text-gray-700">Manage user accounts and roles.</p>
-    </div>
-  </div>
-  <div class="mt-8 flex flex-col">
-    <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-          <table class="min-w-full divide-y divide-gray-300">
-            <thead class="bg-gray-50">
-              <tr>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Username</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                <th scope="col" class="relative px-6 py-3"><span class="sr-only">Actions</span></th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @users.each do |user| %>
-                <tr>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                      <div>
-                        <div class="text-sm font-medium text-gray-900"><%= user.username %></div>
-                        <% if user == current_user %>
-                          <div class="text-sm text-gray-500">(You)</div>
-                        <% end %>
-                      </div>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <%= form_with model: [:admin, user], local: true, method: :patch do |form| %>
-                      <%= form.select :role,
-                          options_for_select([["User", "user"], ["Admin", "admin"]], user.role),
-                          {},
-                          { class: "text-sm rounded border-gray-300 focus:ring-indigo-500 focus:border-indigo-500",
-                            onchange: "this.form.submit();" } %>
-                    <% end %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= time_ago_in_words(user.created_at) %> ago
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <% if user != current_user %>
-                      <%= link_to "Delete", admin_user_path(user), method: :delete,
-                          data: { confirm: "Are you sure you want to delete #{user.username}?" },
-                          class: "text-red-600 hover:text-red-900" %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+<div class="page-container">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="gradient-header animate-fade-in">
+      <div class="flex-between">
+        <div>
+          <h1 class="text-shadow" style="font-size: var(--font-size-3xl); font-weight: 700; margin: 0; margin-bottom: var(--spacing-2);">
+            👥 <%= t('users.title', default: 'User Management') %>
+          </h1>
+          <p style="margin: 0; opacity: 0.9; margin-bottom: var(--spacing-4);">
+            <%= t('users.description', default: 'Manage user accounts and permissions for the application') %>
+          </p>
+          <div class="flex-start gap-6" style="font-size: var(--font-size-sm); opacity: 0.8;">
+            <div class="flex-start gap-2">
+              <div style="width: 0.5rem; height: 0.5rem; background: rgba(255,255,255,0.7); border-radius: 50%;"></div>
+              <span><%= t('users.total_users', default: 'Total') %>: <%= @users.count %></span>
+            </div>
+            <div class="flex-start gap-2">
+              <div style="width: 0.5rem; height: 0.5rem; background: var(--color-success-400); border-radius: 50%;"></div>
+              <span><%= t('users.admin_users', default: 'Admins') %>: <%= @users.where(role: 'admin').count %></span>
+            </div>
+          </div>
+        </div>
+        <div style="flex-shrink: 0;">
+          <div class="flex-center" style="width: 4rem; height: 4rem; background: rgba(255,255,255,0.2); border-radius: var(--radius-xl); transform: rotate(3deg);">
+            <svg style="width: 2rem; height: 2rem; color: white;" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+            </svg>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Statistics Cards -->
+  <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--spacing-6); margin-bottom: var(--spacing-8);" aria-label="User statistics" class="animate-fade-in">
+    <div class="stat-card animate-slide-up">
+      <div class="stat-icon">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <h3><%= @users.count %></h3>
+        <p><%= t('users.total_users', default: 'Total Users') %></p>
+      </div>
+    </div>
+
+    <div class="stat-card animate-slide-up">
+      <div class="stat-icon">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <h3><%= @users.where(role: 'admin').count %></h3>
+        <p><%= t('users.admin_users', default: 'Admin Users') %></p>
+      </div>
+    </div>
+
+    <div class="stat-card animate-slide-up">
+      <div class="stat-icon">
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+        </svg>
+      </div>
+      <div class="stat-content">
+        <h3><%= @users.where(role: 'user').count %></h3>
+        <p><%= t('users.regular_users', default: 'Regular Users') %></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Users Table -->
+  <section aria-label="<%= t('users.all_users', default: 'All Users') %>" class="animate-fade-in">
+    <div class="card">
+      <div class="card-header">
+        <div class="flex-between">
+          <h2 class="card-title"><%= t('users.all_users', default: 'All Users') %></h2>
+          <span class="badge badge-primary">
+            <%= pluralize(@users.count, 'user') %>
+          </span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="table" role="table">
+          <thead>
+            <tr>
+              <th scope="col">
+                <div class="flex items-center gap-2">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><%= t('common.user') %></span>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="flex items-center gap-2">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><%= t('common.role') %></span>
+                </div>
+              </th>
+              <th scope="col">
+                <div class="flex items-center gap-2">
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                  </svg>
+                  <span><%= t('common.created') %></span>
+                </div>
+              </th>
+              <th scope="col">
+                <span class="sr-only"><%= t('common.actions') %></span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+          <% @users.each_with_index do |user, index| %>
+            <tr>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <%= user.username.first.upcase %>
+                  </div>
+                  <div>
+                    <div class="font-semibold"><%= user.username %></div>
+                    <% if user == current_user %>
+                      <span class="badge badge-primary">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <%= t('common.current_user') %>
+                      </span>
+                    <% end %>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="flex flex-col gap-2">
+                  <% if user == current_user && user.role == 'admin' %>
+                    <span class="badge badge-secondary">
+                      <%= t('users.role_admin_self') %>
+                    </span>
+                  <% else %>
+                    <%= form_with model: [:admin, user], local: true, method: :patch, class: "inline-block" do |form| %>
+                      <%= form.select :role,
+                          options_for_select([["User", "user"], ["Admin", "admin"]], user.role),
+                          {},
+                          { class: "text-sm rounded-lg border-gray-300 focus:ring-2 focus:ring-slate-500 focus:border-slate-500 transition-all",
+                            onchange: "this.form.submit();" } %>
+                    <% end %>
+                  <% end %>
+                  <% if user.role == 'admin' %>
+                    <span class="badge badge-success">
+                      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                      </svg>
+                      <%= t('users.admin_access') %>
+                    </span>
+                  <% end %>
+                </div>
+              </td>
+              <td>
+                <div class="font-medium">
+                  <%= localized_time_ago(user.created_at) %>
+                </div>
+                <div class="text-xs text-gray-500">
+                  <%= user.created_at.strftime("%B %d, %Y") %>
+                </div>
+              </td>
+              <td class="text-right">
+                <% if user != current_user %>
+                  <%= link_to admin_user_path(user), method: :delete,
+                      data: { confirm: t('users.delete_confirm', username: user.username) },
+                      class: "btn btn-ghost text-red-600 hover:text-red-800 hover:bg-red-50" do %>
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <%= t('common.delete') %>
+                  <% end %>
+                <% else %>
+                  <span class="text-gray-400 text-sm italic"><%= t('users.cannot_delete_self') %></span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @users.empty? %>
+      <!-- Empty State -->
+      <div class="card-body" style="text-align: center;">
+        <div class="flex-center" style="width: 5rem; height: 5rem; background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-600)); border-radius: 50%; margin: 0 auto var(--spacing-6) auto;">
+          <svg style="width: 2.5rem; height: 2.5rem; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"/>
+          </svg>
+        </div>
+        <h3 class="card-title"><%= t('users.no_users', default: 'No users found') %></h3>
+        <p class="card-description"><%= t('users.no_users_desc', default: 'Get started by creating a new user account.') %></p>
+      </div>
+    <% end %>
+    </div>
+  </section>
+
+  <!-- Footer Info -->
+  <footer style="margin-top: var(--spacing-8); text-align: center;">
+    <p style="font-size: var(--font-size-sm); color: var(--color-neutral-500);">
+      <%= t('users.powered_by', default: 'Powered by Back to the Feature') %>
+    </p>
+  </footer>

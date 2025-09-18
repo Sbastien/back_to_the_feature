@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-  before_action :set_group, only: [:edit, :update, :destroy]
+  before_action :set_group, only: [ :edit, :update, :destroy ]
 
   def index
     @groups = Group.order(:name)

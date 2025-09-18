@@ -17,19 +17,19 @@ Rails.application.routes.draw do
 
   # Flag management routes (web interface)
   resources :flags do
-    resources :rules, except: [:show]
+    resources :rules, except: [ :show ]
   end
 
   # Group management routes
-  resources :groups, except: [:show]
+  resources :groups, except: [ :show ]
 
   # API routes
   namespace :api do
     namespace :v1 do
-      resources :flags, except: [:new, :edit] do
-        resources :rules, except: [:new, :edit, :show]
+      resources :flags, except: [ :new, :edit ] do
+        resources :rules, except: [ :new, :edit, :show ]
       end
-      resources :groups, except: [:new, :edit, :show]
+      resources :groups, except: [ :new, :edit, :show ]
       get "/evaluate/:flag_name", to: "flags#evaluate"
       post "/evaluate/:flag_name", to: "flags#evaluate"
     end
@@ -37,6 +37,10 @@ Rails.application.routes.draw do
 
   # Admin routes
   namespace :admin do
-    resources :users, only: [:index, :update, :destroy]
+    resources :users, only: [ :index, :update, :destroy ]
   end
+
+  # Preferences routes
+  patch "/preferences/theme", to: "preferences#update_theme"
+  patch "/preferences/locale", to: "preferences#update_locale"
 end

@@ -1,21 +1,43 @@
-<div class="px-4 sm:px-6 lg:px-8">
-  <div class="md:flex md:items-center md:justify-between">
-    <div class="flex-1 min-w-0">
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Create New Flag</h2>
+<div class="page-container" style="max-width: 64rem;">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="gradient-header animate-fade-in">
+      <div class="flex-between">
+        <div>
+          <h1 class="text-shadow" style="font-size: var(--font-size-3xl); font-weight: 700; margin: 0; margin-bottom: var(--spacing-2);">
+            🚩 <%= t('flags.create_new', default: 'Create New Feature Flag') %>
+          </h1>
+          <p style="margin: 0; opacity: 0.9;">
+            <%= t('flags.create_description', default: 'Define a new feature flag to control your application features') %>
+          </p>
+        </div>
+        <div style="flex-shrink: 0;">
+          <div class="flex-center" style="width: 4rem; height: 4rem; background: rgba(255,255,255,0.2); border-radius: var(--radius-xl); transform: rotate(3deg);">
+            <svg style="width: 2rem; height: 2rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="mt-8">
-    <%= form_with model: @flag, local: true, class: "space-y-6" do |form| %>
-      <% if @flag.errors.any? %>
-        <div class="rounded-md bg-red-50 p-4">
-          <div class="flex">
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800">
-                There were errors with your submission:
+  <%= form_with model: @flag, local: true, class: "animate-fade-in", style: "display: flex; flex-direction: column; gap: var(--spacing-8);" do |form| %>
+    <% if @flag.errors.any? %>
+      <div class="card" style="background: var(--color-error-50); border-color: var(--color-error-200);">
+        <div class="card-body" style="padding: var(--spacing-6);">
+          <div class="flex-start">
+            <div style="flex-shrink: 0;">
+              <svg style="width: 1.25rem; height: 1.25rem; color: var(--color-error-500);" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div style="margin-left: var(--spacing-3);">
+              <h3 style="font-size: var(--font-size-sm); font-weight: 500; color: var(--color-error-700); margin: 0; margin-bottom: var(--spacing-2);">
+                <%= t('errors.form_errors', default: 'There were errors with your submission:') %>
               </h3>
-              <div class="mt-2 text-sm text-red-700">
-                <ul class="list-disc pl-5 space-y-1">
+              <div style="font-size: var(--font-size-sm); color: var(--color-error-600);">
+                <ul style="list-style: disc; padding-left: var(--spacing-5); margin: 0; display: flex; flex-direction: column; gap: var(--spacing-1);">
                   <% @flag.errors.full_messages.each do |message| %>
                     <li><%= message %></li>
                   <% end %>
@@ -24,58 +46,89 @@
             </div>
           </div>
         </div>
-      <% end %>
-
-      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Basic Information</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Basic details about your feature flag.
-            </p>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="grid grid-cols-6 gap-6">
-              <div class="col-span-6">
-                <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
-                <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-
-              <div class="col-span-6">
-                <%= form.label :description, class: "block text-sm font-medium text-gray-700" %>
-                <%= form.text_area :description, rows: 3, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Variants</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Define the variants for A/B testing. Weights should add up to 100.
-            </p>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div id="variants-container">
-              <% (@flag.variants || [{"name" => "A", "weight" => 50}, {"name" => "B", "weight" => 50}]).each_with_index do |variant, index| %>
-                <div class="flex items-center space-x-4 mb-4">
-                  <%= text_field_tag "flag[variants][#{index}][name]", variant["name"], placeholder: "Variant name", class: "focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-                  <%= number_field_tag "flag[variants][#{index}][weight]", variant["weight"], placeholder: "Weight", min: 0, max: 100, class: "focus:ring-indigo-500 focus:border-indigo-500 block w-32 shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-                  <span class="text-sm text-gray-500">%</span>
-                </div>
-              <% end %>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end space-x-3">
-        <%= link_to "Cancel", flags_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-        <%= form.submit "Create Flag", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       </div>
     <% end %>
-  </div>
+
+    <!-- Basic Information Card -->
+    <div class="card animate-slide-up">
+      <div class="card-body">
+        <div class="flex-start" style="margin-bottom: var(--spacing-6);">
+          <div class="flex-center" style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--color-neutral-600), var(--color-neutral-700)); border-radius: var(--radius-lg); margin-right: var(--spacing-4);">
+            <svg style="width: 1.25rem; height: 1.25rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="card-title"><%= t('flags.basic_information', default: 'Basic Information') %></h3>
+            <p class="card-description"><%= t('flags.basic_information_desc', default: 'Essential details about your feature flag') %></p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-6);">
+          <div class="form-group">
+            <%= form.label :name, t('flags.flag_name', default: 'Flag Name'), class: "form-label" %>
+            <div class="input-icon">
+              <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"/>
+              </svg>
+              <%= form.text_field :name,
+                                  placeholder: t('flags.name_placeholder', default: 'e.g., new_dashboard_design'),
+                                  class: "form-input #{@flag.errors[:name].any? ? 'error' : ''}" %>
+            </div>
+            <% if @flag.errors[:name].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @flag.errors[:name].first %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :description, t('flags.description', default: 'Description'), class: "form-label" %>
+            <%= form.text_area :description,
+                               rows: 4,
+                               placeholder: t('flags.description_placeholder', default: 'Describe what this feature flag controls and its purpose...'),
+                               class: "form-textarea #{@flag.errors[:description].any? ? 'error' : ''}" %>
+            <% if @flag.errors[:description].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @flag.errors[:description].first %>
+              </div>
+            <% end %>
+            <div class="form-help">
+              <%= t('flags.description_help', default: 'A clear description helps team members understand the purpose of this flag.') %>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="flex-start gap-3" style="align-items: center;">
+              <%= form.check_box :enabled, class: "form-checkbox", style: "width: 1.25rem; height: 1.25rem;" %>
+              <%= form.label :enabled, t('flags.enabled', default: 'Enabled'), class: "form-label", style: "margin: 0; font-weight: 500;" %>
+            </div>
+            <div class="form-help">
+              <%= t('flags.enabled_help', default: 'When disabled, this flag will always return false regardless of rules.') %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Action Buttons -->
+    <div class="flex-between animate-slide-up" style="padding-top: var(--spacing-6);">
+      <%= link_to flags_path, class: "btn btn-secondary animate-scale" do %>
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0L2.586 11H9a1 1 0 100-2H2.586l3.707-3.707a1 1 0 00-1.414-1.414l-5.414 5.414a1 1 0 000 1.414l5.414 5.414a1 1 0 001.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <%= t('common.cancel', default: 'Cancel') %>
+      <% end %>
+
+      <%= form.submit t('flags.create_flag', default: 'Create Feature Flag'),
+                      class: "btn btn-primary animate-scale" %>
+    </div>
+  <% end %>
 </div>

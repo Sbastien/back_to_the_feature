@@ -1,5 +1,5 @@
 class Api::V1::FlagsController < Api::V1::BaseController
-  before_action :set_flag, only: [:show, :update, :destroy, :evaluate]
+  before_action :set_flag, only: [ :show, :update, :destroy, :evaluate ]
 
   def index
     @flags = Flag.includes(:rules).order(:name)
@@ -36,7 +36,7 @@ class Api::V1::FlagsController < Api::V1::BaseController
   def evaluate
     # Accept user attributes from the client application
     user_attributes = params[:user_attributes] || {}
-    user_id = params[:user_id] || user_attributes['id']
+    user_id = params[:user_id] || user_attributes["id"]
 
     context = {
       user_id: user_id,
@@ -47,7 +47,6 @@ class Api::V1::FlagsController < Api::V1::BaseController
 
     render json: {
       flag_name: @flag.name,
-      variant: result[:variant],
       enabled: result[:enabled],
       rule_type: result[:rule_type],
       rule_id: result[:rule_id]
@@ -61,6 +60,6 @@ class Api::V1::FlagsController < Api::V1::BaseController
   end
 
   def flag_params
-    params.require(:flag).permit(:name, :description, variants: [:name, :weight])
+    params.require(:flag).permit(:name, :description, :enabled)
   end
 end

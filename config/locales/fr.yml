@@ -1,0 +1,244 @@
+fr:
+  # Navigation
+  nav:
+    title: "🚀 Back to the Feature"
+    feature_flags: "Feature Flags"
+    groups: "Groupes"
+    users: "Utilisateurs"
+    user_groups: "Groupes d'Utilisateurs"
+    logout: "Déconnexion"
+    change_language: "Changer de langue"
+    toggle_theme: "Basculer le thème"
+
+  # Authentication
+  auth:
+    login: "Connexion"
+    register: "Inscription"
+    username: "Nom d'utilisateur"
+    password: "Mot de passe"
+    login_button: "Se connecter"
+    register_button: "Créer un compte"
+    logout_confirm: "Êtes-vous sûr de vouloir vous déconnecter ?"
+
+  # Common
+  common:
+    administrator: "Administrateur"
+    current_user: "Utilisateur actuel"
+    actions: "Actions"
+    created: "Créé"
+    ago: "il y a"
+    role: "Rôle"
+    user: "Utilisateur"
+    admin: "Admin"
+    delete: "Supprimer"
+    edit: "Modifier"
+    view: "Voir"
+    use: "Utiliser"
+    save: "Enregistrer"
+    cancel: "Annuler"
+    confirm: "Êtes-vous sûr ?"
+    loading: "Chargement..."
+    error: "Une erreur s'est produite"
+    success: "Opération terminée avec succès"
+    tip: "Astuce"
+    learn_more: "En Savoir Plus"
+
+  # Errors
+  errors:
+    form_errors: "Il y a eu des erreurs avec votre soumission :"
+    messages:
+      blank: "ne peut pas être vide"
+      inclusion: "n'est pas inclus dans la liste"
+    attributes:
+      value:
+        blank: "La valeur ne peut pas être vide"
+
+  # Feature Flags
+  flags:
+    title: "Gestion des Feature Flags"
+    description: "Contrôlez et surveillez les versions de fonctionnalités dans tous les environnements"
+    manage_description: "Gérez et contrôlez les fonctionnalités de votre application en toute confiance"
+    total: "Total"
+    active: "Actif"
+    disabled: "Désactivé"
+    no_rules: "Aucune Règle"
+    rules: "Règles"
+    create_flag: "Créer un Feature Flag"
+    create_new: "Créer un Nouveau Feature Flag"
+    create_description: "Définissez un nouveau feature flag pour contrôler vos fonctionnalités"
+    edit_flag: "Modifier le Feature Flag"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer ce feature flag ?"
+    flag_name: "Nom du Feature Flag"
+    name_placeholder: "ex: nouvelle_interface_tableau_de_bord"
+    description: "Description"
+    description_placeholder: "Décrivez ce que contrôle ce feature flag et son objectif..."
+    description_help: "Une description claire aide les membres de l'équipe à comprendre l'objectif de ce feature flag."
+    basic_information: "Informations de Base"
+    basic_information_desc: "Détails essentiels sur votre feature flag"
+    back_to_flags: "Retour aux Feature Flags"
+    empty_state:
+      title: "Aucun feature flag pour le moment"
+      description: "Commencez en créant votre premier feature flag pour contrôler les fonctionnalités de votre application."
+      cta: "Créer Votre Premier Feature Flag"
+
+  # Groups
+  groups:
+    title: "Gestion des Groupes"
+    description: "Organisez les utilisateurs et gérez le contrôle d'accès"
+    manage_description: "Gérez les groupes d'utilisateurs pour cibler les feature flags en utilisant des expressions JMESPath sécurisées"
+    total: "Total"
+    secure: "JMESPath Sécurisé"
+    create_group: "Créer un Groupe"
+    create_new: "Créer un Groupe d'Utilisateurs"
+    create_description: "Définissez un nouveau groupe d'utilisateurs avec des expressions JMESPath sécurisées"
+    edit_group: "Modifier le Groupe"
+    edit_description: "Mettre à jour le groupe d'utilisateurs avec des expressions JMESPath sécurisées"
+    update_group: "Mettre à Jour le Groupe"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer ce groupe ?"
+    group_name: "Nom du Groupe"
+    name_placeholder: "ex: testeurs_beta, utilisateurs_premium"
+    group_information: "Informations du Groupe"
+    group_information_desc: "Définissez les détails de base de votre groupe d'utilisateurs"
+    edit_group_desc: "Mettez à jour les détails de base de votre groupe d'utilisateurs"
+    jmespath_expression: "Expression JMESPath"
+    jmespath_desc: "Expression standardisée et sécurisée pour définir l'appartenance au groupe"
+    expression: "Expression"
+    expression_placeholder: "ex: ends_with(email, '@company.com')"
+    expression_help: "Définissez l'expression JMESPath qui détermine si un utilisateur appartient à ce groupe. Utilise une syntaxe standardisée et sécurisée."
+    expression_examples: "Exemples d'Expression"
+    examples_desc: "Cliquez sur \"Utiliser\" pour remplir le champ d'expression"
+    secure_evaluation: "Évaluation Sécurisée"
+    no_code_execution: "Aucune Exécution de Code"
+    standardized_syntax: "Syntaxe Standardisée"
+    secure_desc: "Utilise JMESPath pour une évaluation d'expression sécurisée et standardisée. Aucun risque d'exécution de code - les expressions sont validées et isolées."
+    external_service: "Service Externe"
+    external_service_desc: "Les groupes évaluent les attributs utilisateur envoyés par les applications clientes via l'API. Le client envoie des données utilisateur comme"
+    learn_jmespath: "Apprendre JMESPath"
+    jmespath_learn: "Visitez"
+    jmespath_learn_desc: "pour une documentation complète et des tutoriels interactifs."
+    jmespath_docs_desc: "pour une documentation complète et des exemples."
+    usage_in_rules: "Utilisation dans les règles"
+    empty_state:
+      title: "Aucun groupe d'utilisateurs pour le moment"
+      description: "Commencez en créant votre premier groupe d'utilisateurs avec des expressions JMESPath sécurisées pour cibler des utilisateurs spécifiques pour vos feature flags."
+      cta: "Créer Votre Premier Groupe"
+
+  # Users
+  users:
+    title: "Gestion des Utilisateurs"
+    description: "Gérez les comptes utilisateur, les rôles et les autorisations"
+    manage_description: "Gérez les comptes utilisateur et les autorisations pour l'application"
+    total_users: "Utilisateurs Totaux"
+    admin_users: "Utilisateurs Administrateurs"
+    regular_users: "Utilisateurs Réguliers"
+    all_users: "Tous les Utilisateurs"
+    cannot_delete_self: "Impossible de vous supprimer vous-même"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer %{username} ? Cette action ne peut pas être annulée."
+    role_admin_self: "Admin (Vous)"
+    admin_access: "Accès Administrateur"
+    powered_by: "Alimenté par Back to the Feature"
+    no_users: "Aucun utilisateur trouvé"
+    no_users_desc: "Commencez en créant un nouveau compte utilisateur."
+
+  # Time
+  time:
+    ago: "il y a"
+
+  # Date and time translations (Rails standard)
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: "environ une heure"
+        other: "environ %{count} heures"
+      about_x_months:
+        one: "environ un mois"
+        other: "environ %{count} mois"
+      about_x_years:
+        one: "environ un an"
+        other: "environ %{count} ans"
+      almost_x_years:
+        one: "presqu'un an"
+        other: "presque %{count} ans"
+      half_a_minute: "une demi-minute"
+      less_than_x_minutes:
+        one: "moins d'une minute"
+        other: "moins de %{count} minutes"
+      less_than_x_seconds:
+        one: "moins d'une seconde"
+        other: "moins de %{count} secondes"
+      over_x_years:
+        one: "plus d'un an"
+        other: "plus de %{count} ans"
+      x_days:
+        one: "1 jour"
+        other: "%{count} jours"
+      x_minutes:
+        one: "1 minute"
+        other: "%{count} minutes"
+      x_months:
+        one: "1 mois"
+        other: "%{count} mois"
+      x_seconds:
+        one: "1 seconde"
+        other: "%{count} secondes"
+      x_years:
+        one: "1 an"
+        other: "%{count} ans"
+
+  # Rules
+  rules:
+    title: "Règles de Fonctionnalité"
+    description: "Gérez les règles d'évaluation pour les drapeaux de fonctionnalité"
+    add_rule: "Ajouter une Règle"
+    edit_rule: "Modifier la Règle"
+    create_rule: "Créer la Règle"
+    update_rule: "Mettre à Jour la Règle"
+    delete_rule: "Supprimer la Règle"
+    delete_confirm: "Êtes-vous sûr de vouloir supprimer cette règle ?"
+    rule_configuration: "Configuration de la Règle"
+    configuration_desc: "Choisissez le type de règle et configurez sa valeur"
+    edit_configuration_desc: "Modifiez le type et la valeur de cette règle"
+    rule_type: "Type de Règle"
+    rule_value: "Valeur de la Règle"
+    percentage_type: "Pourcentage d'Acteurs"
+    group_type: "Groupe"
+    select_type: "Sélectionnez le type de règle"
+    percentage_placeholder: "Entrez le pourcentage (0-100)"
+    percentage_help: "Pourcentage d'utilisateurs qui verront ce drapeau (0-100)"
+    select_group: "Sélectionnez un groupe"
+    group_help: "Les utilisateurs correspondant au groupe sélectionné verront ce drapeau."
+    manage_groups: "Gérer les groupes"
+    evaluation_rules: "Règles d'Évaluation"
+    evaluation_desc: "Règles évaluées dans l'ordre - la première correspondance gagne"
+    evaluation_order: "Ordre d'Évaluation"
+    evaluation_order_desc: "Les règles sont traitées de haut en bas. La première règle correspondante détermine le comportement du feature flag."
+    no_rules: "Aucune règle définie"
+    no_rules_desc: "Commencez à contrôler votre feature flag en ajoutant des règles d'évaluation"
+    add_first_rule: "Ajouter Votre Première Règle"
+    add_description: "Configurez une nouvelle règle pour contrôler le comportement de ce feature flag"
+    edit_description: "Mettez à jour la configuration de cette règle"
+
+  # Flash messages
+  flash:
+    admin_role_protection: "Impossible de retirer votre propre rôle d'administrateur."
+    theme_updated: "Thème mis à jour avec succès"
+    locale_updated: "Langue mise à jour avec succès"
+    user_updated: "Utilisateur mis à jour avec succès"
+    user_deleted: "Utilisateur supprimé avec succès"
+
+  # ActiveRecord validations
+  activerecord:
+    errors:
+      models:
+        rule:
+          attributes:
+            value:
+              blank: "La valeur ne peut pas être vide"
+              inclusion: "Valeur invalide pour ce type de règle"
+            type:
+              blank: "Le type ne peut pas être vide"
+              inclusion: "Le type doit être percentage_of_actors ou group"
+      messages:
+        blank: "ne peut pas être vide"
+        inclusion: "n'est pas inclus dans la liste"
+

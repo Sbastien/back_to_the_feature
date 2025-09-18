@@ -1,5 +1,5 @@
 class FlagsController < ApplicationController
-  before_action :set_flag, only: [:show, :edit, :update, :destroy]
+  before_action :set_flag, only: [ :show, :edit, :update, :destroy ]
 
   def index
     @flags = Flag.includes(:rules).order(:name)
@@ -46,6 +46,6 @@ class FlagsController < ApplicationController
   end
 
   def flag_params
-    params.require(:flag).permit(:name, :description, variants: [:name, :weight])
+    params.require(:flag).permit(:name, :description, :enabled)
   end
 end

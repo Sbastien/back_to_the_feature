@@ -134,6 +134,7 @@ GEM
     jbuilder (2.14.1)
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
+    jmespath (1.6.2)
     json (2.13.2)
     kamal (2.7.0)
       activesupport (>= 7.0)
@@ -403,6 +404,7 @@ DEPENDENCIES
   factory_bot_rails
   importmap-rails
   jbuilder
+  jmespath
   kamal
   pg (~> 1.1)
   propshaft

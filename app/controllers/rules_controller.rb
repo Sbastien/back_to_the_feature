@@ -1,6 +1,6 @@
 class RulesController < ApplicationController
   before_action :set_flag
-  before_action :set_rule, only: [:edit, :update, :destroy]
+  before_action :set_rule, only: [ :edit, :update, :destroy ]
 
   def new
     @rule = @flag.rules.build

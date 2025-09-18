@@ -1,5 +1,5 @@
 class Api::V1::GroupsController < Api::V1::BaseController
-  before_action :set_group, only: [:update, :destroy]
+  before_action :set_group, only: [ :update, :destroy ]
 
   def index
     @groups = Group.order(:name)

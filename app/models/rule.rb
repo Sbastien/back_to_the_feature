@@ -4,7 +4,7 @@ class Rule < ApplicationRecord
 
   belongs_to :flag
 
-  validates :type, inclusion: { in: %w[boolean percentage_of_actors group] }
+  validates :type, inclusion: { in: %w[percentage_of_actors group] }
   validates :value, presence: true
   validate :validate_value_for_type
 
@@ -12,10 +12,8 @@ class Rule < ApplicationRecord
 
   def applies_to?(context)
     case type
-    when "boolean"
-      value == "on"
     when "percentage_of_actors"
-      user_id = context[:user_id] || context[:user_attributes]&.dig('id')
+      user_id = context[:user_id] || context[:user_attributes]&.dig("id")
       return false unless user_id
       user_percentage(user_id) < value.to_i
     when "group"
@@ -29,16 +27,11 @@ class Rule < ApplicationRecord
     end
   end
 
-  def kill_switch?
-    type == "boolean" && value == "off"
-  end
 
   private
 
   def validate_value_for_type
     case type
-    when "boolean"
-      errors.add(:value, "must be 'on' or 'off'") unless %w[on off].include?(value)
     when "percentage_of_actors"
       percentage = value.to_i
       errors.add(:value, "must be between 0 and 100") unless percentage.between?(0, 100)

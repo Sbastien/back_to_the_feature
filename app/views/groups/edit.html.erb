@@ -1,21 +1,43 @@
-<div class="px-4 sm:px-6 lg:px-8">
-  <div class="md:flex md:items-center md:justify-between">
-    <div class="flex-1 min-w-0">
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">Edit <%= @group.name %></h2>
+<div class="page-container" style="max-width: 64rem;">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="gradient-header animate-fade-in">
+      <div class="flex-between">
+        <div>
+          <h1 class="text-shadow" style="font-size: var(--font-size-3xl); font-weight: 700; margin: 0; margin-bottom: var(--spacing-2);">
+            👥 <%= t('groups.edit_group', default: 'Edit Group') %>: <%= @group.name %>
+          </h1>
+          <p style="margin: 0; opacity: 0.9;">
+            <%= t('groups.edit_description', default: 'Update user group with secure JMESPath expressions') %>
+          </p>
+        </div>
+        <div style="flex-shrink: 0;">
+          <div class="flex-center" style="width: 4rem; height: 4rem; background: rgba(255,255,255,0.2); border-radius: var(--radius-xl); transform: rotate(3deg);">
+            <svg style="width: 2rem; height: 2rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="mt-8">
-    <%= form_with model: @group, local: true, class: "space-y-6" do |form| %>
-      <% if @group.errors.any? %>
-        <div class="rounded-md bg-red-50 p-4">
-          <div class="flex">
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800">
-                There were errors with your submission:
+  <%= form_with model: @group, local: true, class: "animate-fade-in", style: "display: flex; flex-direction: column; gap: var(--spacing-8);" do |form| %>
+    <% if @group.errors.any? %>
+      <div class="card" style="background: var(--color-error-50); border-color: var(--color-error-200);">
+        <div class="card-body" style="padding: var(--spacing-6);">
+          <div class="flex-start">
+            <div style="flex-shrink: 0;">
+              <svg style="width: 1.25rem; height: 1.25rem; color: var(--color-error-500);" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div style="margin-left: var(--spacing-3);">
+              <h3 style="font-size: var(--font-size-sm); font-weight: 500; color: var(--color-error-700); margin: 0; margin-bottom: var(--spacing-2);">
+                <%= t('errors.form_errors', default: 'There were errors with your submission:') %>
               </h3>
-              <div class="mt-2 text-sm text-red-700">
-                <ul class="list-disc pl-5 space-y-1">
+              <div style="font-size: var(--font-size-sm); color: var(--color-error-600);">
+                <ul style="list-style: disc; padding-left: var(--spacing-5); margin: 0; display: flex; flex-direction: column; gap: var(--spacing-1);">
                   <% @group.errors.full_messages.each do |message| %>
                     <li><%= message %></li>
                   <% end %>
@@ -24,71 +46,124 @@
             </div>
           </div>
         </div>
-      <% end %>
-
-      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Group Information</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Define a group of users that can be targeted by feature flags.
-            </p>
-          </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="grid grid-cols-6 gap-6">
-              <div class="col-span-6">
-                <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
-                <%= form.text_field :name, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-              </div>
-
-              <div class="col-span-6">
-                <%= form.label :definition, "Definition", class: "block text-sm font-medium text-gray-700" %>
-                <%= form.text_area :definition, rows: 4, class: "mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" %>
-                <p class="mt-2 text-sm text-gray-500">
-                  Define the logic that determines if a user belongs to this group.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-gray-50 px-4 py-5 sm:rounded-lg sm:p-6">
-        <h3 class="text-lg font-medium leading-6 text-gray-900 mb-4">Example Definitions</h3>
-        <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded">
-          <p class="text-sm text-blue-800">
-            <strong>External Service:</strong> Groups evaluate user attributes sent by client applications via the API.
-            The client sends user data like <code>{"id": 123, "email": "user@company.com", "role": "admin"}</code>
-          </p>
-        </div>
-        <div class="space-y-3 text-sm">
-          <div>
-            <code class="bg-white px-2 py-1 rounded border">email.ends_with? "@company.com"</code>
-            <span class="ml-2 text-gray-600">Users with company email addresses</span>
-          </div>
-          <div>
-            <code class="bg-white px-2 py-1 rounded border">username.starts_with? "admin_"</code>
-            <span class="ml-2 text-gray-600">Users with admin usernames</span>
-          </div>
-          <div>
-            <code class="bg-white px-2 py-1 rounded border">role == "premium"</code>
-            <span class="ml-2 text-gray-600">Users with premium subscription</span>
-          </div>
-          <div>
-            <code class="bg-white px-2 py-1 rounded border">country == "US"</code>
-            <span class="ml-2 text-gray-600">Users from United States</span>
-          </div>
-          <div>
-            <code class="bg-white px-2 py-1 rounded border">id.in? [1, 2, 3, 4, 5]</code>
-            <span class="ml-2 text-gray-600">Specific user IDs</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="flex justify-end space-x-3">
-        <%= link_to "Cancel", groups_path, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-        <%= form.submit "Update Group", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
       </div>
     <% end %>
-  </div>
+
+    <!-- Group Information Card -->
+    <div class="card animate-slide-up">
+      <div class="card-body">
+        <div class="flex-start" style="margin-bottom: var(--spacing-6);">
+          <div class="flex-center" style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--color-neutral-600), var(--color-neutral-700)); border-radius: var(--radius-lg); margin-right: var(--spacing-4);">
+            <svg style="width: 1.25rem; height: 1.25rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="card-title"><%= t('groups.group_information', default: 'Group Information') %></h3>
+            <p class="card-description"><%= t('groups.edit_group_desc', default: 'Update the basic details for your user group') %></p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-6);">
+          <div class="form-group">
+            <%= form.label :name, t('groups.group_name', default: 'Group Name'), class: "form-label" %>
+            <%= form.text_field :name,
+                                class: "form-input #{@group.errors[:name].any? ? 'error' : ''}" %>
+            <% if @group.errors[:name].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @group.errors[:name].first %>
+              </div>
+            <% end %>
+          </div>
+
+          <div class="form-group">
+            <%= form.label :definition, t('groups.jmespath_expression', default: 'JMESPath Expression'), class: "form-label" %>
+            <%= form.text_area :definition,
+                               rows: 4,
+                               class: "form-textarea #{@group.errors[:definition].any? ? 'error' : ''}",
+                               style: "background: var(--color-neutral-50); color: var(--color-neutral-800); font-family: var(--font-mono); border: 1px solid var(--color-neutral-300); font-weight: 500;" %>
+            <% if @group.errors[:definition].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @group.errors[:definition].first %>
+              </div>
+            <% else %>
+              <div class="form-help">
+                <%= t('groups.expression_help', default: 'Define the JMESPath expression that determines if a user belongs to this group. Uses secure, standardized syntax.') %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples Card -->
+    <div class="card animate-slide-up">
+      <div class="card-body">
+        <div class="flex-start" style="margin-bottom: var(--spacing-6);">
+          <div class="flex-center" style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--color-neutral-600), var(--color-neutral-700)); border-radius: var(--radius-lg); margin-right: var(--spacing-4);">
+            <svg style="width: 1.25rem; height: 1.25rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="card-title"><%= t('groups.expression_examples', default: 'JMESPath Expression Examples') %></h3>
+            <p class="card-description"><%= t('groups.examples_desc', default: 'Click "Use" to populate the expression field') %></p>
+          </div>
+        </div>
+
+        <div style="margin-bottom: var(--spacing-4); padding: var(--spacing-3); background: var(--color-success-50); border: 1px solid var(--color-success-200); border-radius: var(--radius-lg);">
+          <p style="font-size: var(--font-size-sm); color: var(--color-success-800); margin: 0;">
+            <strong>🔒 <%= t('groups.secure_evaluation', default: 'Secure Evaluation') %>:</strong> <%= t('groups.secure_desc', default: 'Uses JMESPath for safe, standardized expression evaluation. No code execution risks - expressions are validated and sandboxed.') %>
+          </p>
+        </div>
+
+        <div style="margin-bottom: var(--spacing-4); padding: var(--spacing-3); background: var(--color-primary-50); border: 1px solid var(--color-primary-200); border-radius: var(--radius-lg);">
+          <p style="font-size: var(--font-size-sm); color: var(--color-primary-800); margin: 0;">
+            <strong><%= t('groups.external_service', default: 'External Service') %>:</strong> <%= t('groups.external_service_desc', default: 'Groups evaluate user attributes sent by client applications via the API. The client sends user data like') %> <code style="background: var(--color-neutral-200); padding: 0.125rem var(--spacing-1); border-radius: var(--radius-sm);">{"id": 123, "email": "user@company.com", "role": "admin"}</code>
+          </p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-3); font-size: var(--font-size-sm);">
+          <% Group.example_expressions.each do |name, expression| %>
+            <div class="flex-start">
+              <button type="button"
+                      onclick="document.getElementById('group_definition').value='<%= expression %>'"
+                      class="btn btn-ghost btn-xs" style="margin-right: var(--spacing-2);">
+                <%= t('common.use', default: 'Use') %>
+              </button>
+              <div style="flex: 1;">
+                <code style="background: white; padding: var(--spacing-2); border-radius: var(--radius-sm); border: 1px solid var(--color-neutral-300); font-family: var(--font-mono);"><%= expression %></code>
+                <span style="margin-left: var(--spacing-2); color: var(--color-neutral-600);"><%= name %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+
+        <div style="margin-top: var(--spacing-4); padding: var(--spacing-3); background: var(--color-warning-50); border: 1px solid var(--color-warning-200); border-radius: var(--radius-lg);">
+          <p style="font-size: var(--font-size-xs); color: var(--color-warning-800); margin: 0;">
+            <strong><%= t('groups.learn_jmespath', default: 'Learn JMESPath') %>:</strong> <%= t('groups.jmespath_learn', default: 'Visit') %> <a href="https://jmespath.org/" target="_blank" style="text-decoration: underline;">jmespath.org</a> <%= t('groups.jmespath_docs_desc', default: 'for full documentation and examples.') %>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex-between animate-slide-up" style="padding-top: var(--spacing-6);">
+      <%= link_to groups_path, class: "btn btn-secondary animate-scale" do %>
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0L2.586 11H9a1 1 0 100-2H2.586l3.707-3.707a1 1 0 00-1.414-1.414l-5.414 5.414a1 1 0 000 1.414l5.414 5.414a1 1 0 001.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <%= t('common.cancel', default: 'Cancel') %>
+      <% end %>
+
+      <%= form.submit t('groups.update_group', default: 'Update Group'),
+                      class: "btn btn-primary animate-scale" %>
+    </div>
+  <% end %>
 </div>

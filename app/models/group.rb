@@ -1,61 +1,99 @@
 class Group < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates :definition, presence: true
+  validate :validate_expression_syntax
+
+  # Association-style method that returns a relation for counting/checking
+  def rules
+    Rule.where(type: "group", value: name)
+  end
+
+  # Memoized rule count for performance
+  def rule_count
+    @rule_count ||= rules.count
+  end
+
+  # Check if any rules exist
+  def has_rules?
+    rules.exists?
+  end
 
   # Evaluate group membership based on user attributes sent by client application
   def includes_user?(user_attributes)
     return false unless user_attributes.is_a?(Hash)
 
-    case definition
-    when /^email\.ends_with\?\s*["'](.*?)["']$/
-      domain = $1
-      user_attributes['email']&.end_with?(domain)
-    when /^email\.include\?\s*["'](.*?)["']$/
-      substring = $1
-      user_attributes['email']&.include?(substring)
-    when /^username\.starts_with\?\s*["'](.*?)["']$/
-      prefix = $1
-      user_attributes['username']&.start_with?(prefix)
-    when /^id\.in\?\s*\[(.*?)\]$/
-      ids = $1.split(',').map(&:strip).map(&:to_i)
-      ids.include?(user_attributes['id']&.to_i)
-    when /^role\s*==\s*["'](.*?)["']$/
-      role = $1
-      user_attributes['role'] == role
-    when /^country\s*==\s*["'](.*?)["']$/
-      country = $1
-      user_attributes['country'] == country
-    when /^subscription\s*==\s*["'](.*?)["']$/
-      subscription = $1
-      user_attributes['subscription'] == subscription
+    # Ensure all attributes are strings for consistent JMESPath evaluation
+    normalized_attributes = normalize_attributes(user_attributes)
+
+    # Use JMESPath for safe expression evaluation
+    result = JMESPath.search(definition, normalized_attributes)
+
+    # JMESPath returns various types, convert to boolean
+    case result
+    when true, false
+      result
+    when nil
+      false
+    when String
+      !result.empty?
+    when Numeric
+      result != 0
+    when Array
+      !result.empty?
     else
-      # For more complex definitions, evaluate safely
-      safe_eval_definition(user_attributes)
+      !!result
     end
-  rescue StandardError => e
-    Rails.logger.error "Error evaluating group definition for #{name}: #{e.message}"
+  rescue JMESPath::Errors::Error => e
+    Rails.logger.error "JMESPath evaluation error for group #{name}: #{e.message}"
     false
+  rescue StandardError => e
+    Rails.logger.error "Unexpected error evaluating group #{name}: #{e.message}"
+    false
+  end
+
+  # Helper method to get example expressions for the UI
+  def self.example_expressions
+    {
+      "Premium users" => "role == 'premium'",
+      "Company emails" => "ends_with(email, '@company.com')",
+      "Beta testers" => "ends_with(email, '@example.com')",
+      "US/CA users" => "contains(['US', 'CA'], country)",
+      "Active users" => "status == 'active'",
+      "Specific IDs" => "contains([1, 2, 3, 4, 5], id)",
+      "Pro subscribers" => "subscription == 'pro'",
+      "Admin users" => "starts_with(username, 'admin_')",
+      "Has email" => "email",
+      "Not premium" => "role != 'premium'"
+    }
   end
 
   private
 
-  def safe_eval_definition(user_attributes)
-    # Simple safe evaluation for basic expressions
-    # Only allow safe operations on user attributes
-    safe_definition = definition.dup
+  def validate_expression_syntax
+    return if definition.blank?
 
-    # Replace common attribute patterns
+    unless GroupExpressionValidator.valid?(definition)
+      validator = GroupExpressionValidator.new(definition)
+      errors.add(:definition, "Invalid expression: #{validator.errors.join(', ')}")
+    end
+  end
+
+  def normalize_attributes(user_attributes)
+    normalized = {}
+
     user_attributes.each do |key, value|
-      safe_definition.gsub!(/\b#{Regexp.escape(key)}\b/, value.to_s.inspect)
+      # Convert all keys to strings
+      string_key = key.to_s
+
+      # Convert values to appropriate types for JMESPath
+      normalized[string_key] = case value
+      when String, Integer, Float, TrueClass, FalseClass, NilClass
+                                 value
+      else
+                                 value.to_s
+      end
     end
 
-    # Only allow safe operations and known attributes
-    allowed_pattern = /\A[\w\s"'\.=<>!&|()]+\z/
-    return false unless safe_definition.match?(allowed_pattern)
-
-    # Evaluate in a restricted context
-    eval(safe_definition)
-  rescue StandardError
-    false
+    normalized
   end
 end

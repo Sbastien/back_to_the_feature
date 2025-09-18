@@ -1,17 +1,41 @@
 # Back to the Feature
 
+> ⚠️ **WARNING: This is a Proof of Concept (POC)** ⚠️
+>
+> This project is **NOT production-ready** and should be considered experimental. It lacks essential production features such as:
+> - Proper API authentication and authorization
+> - Rate limiting and security hardening
+> - Performance optimizations and caching
+> - Comprehensive error handling
+> - Monitoring and observability
+> - Production-grade input validation and sanitization
+> - Scalability considerations
+>
+> **Note:** While group expressions use secure JMESPath evaluation, other security aspects need implementation for production use.
+>
+> **Use at your own risk. Not recommended for production environments.**
+
 A minimalist open-source feature flags management service with web interface and user system, inspired by Flipper.
+
+## Screenshots
+
+### Feature Flags Dashboard
+<img width="1248" height="914" alt="Feature Flags Dashboard showing the main interface with flags, status badges, and management actions" src="https://github.com/user-attachments/assets/0befe4f2-f291-416d-826c-a181bdf2e9b1" />
+
+### Flag Details and Rules Management
+<img width="1240" height="1050" alt="Flag details page showing rules configuration, targeting options, and evaluation settings" src="https://github.com/user-attachments/assets/7dc8e9d8-58ee-45f2-bd64-de94a8045c1a" />
 
 ## Features
 
 - ✅ **Feature Flag Management** : Create, edit and delete feature flags
 - ✅ **Rules System** : Support for boolean, percentage and group-based rules
-- ✅ **A/B Testing** : Multiple variants with customizable weights
-- ✅ **User Groups** : Define user groups with logical expressions
+- ✅ **Feature Control** : Simple on/off control with percentage and group rules
+- ✅ **User Groups** : Define user groups with secure JMESPath expressions
 - ✅ **Web Interface** : Simple and intuitive interface with Tailwind CSS
 - ✅ **REST API** : Complete API for external application integration
 - ✅ **Authentication** : User system with admin/user roles
 - ✅ **Kill Switch** : Instantly disable any flag
+- ✅ **Secure Evaluation** : JMESPath for safe expression evaluation without code execution risks
 
 ## Installation
 
@@ -47,7 +71,7 @@ A minimalist open-source feature flags management service with web interface and
 ### Web Interface
 
 1. **Login** : Use the default admin account or create a new account
-2. **Flag Management** : Create feature flags with descriptions and variants
+2. **Flag Management** : Create feature flags with descriptions
 3. **Add Rules** : Configure activation rules (boolean, percentage, group)
 4. **Group Management** : Define user groups with logical expressions
 5. **Administration** : Admins can manage users and their roles
@@ -72,11 +96,7 @@ Content-Type: application/json
 {
   "flag": {
     "name": "new_feature",
-    "description": "New feature description",
-    "variants": [
-      {"name": "control", "weight": 50},
-      {"name": "variant", "weight": 50}
-    ]
+    "description": "New feature description"
   }
 }
 ```
@@ -121,50 +141,61 @@ Response:
 ```json
 {
   "flag_name": "new_feature",
-  "variant": "control",
   "enabled": true,
   "rule_type": "percentage_of_actors",
   "rule_id": 42
 }
 ```
 
+### Flag Control
+
+Each flag has a global **enabled/disabled** toggle that acts as a kill switch. When disabled, the flag will always return `false` regardless of any rules.
+
 ### Rule Types
 
-1. **Boolean** : Global activation/deactivation
-   - `on` : Enable flag for everyone
-   - `off` : Disable flag (kill switch)
-
-2. **Percentage of Actors** : Percentage of users
+1. **Percentage of Actors** : Percentage of users
    - Value: 0-100
    - Uses deterministic hashing of user ID
 
-3. **Group** : User groups
+2. **Group** : User groups
    - References a separately defined group
    - Evaluates the group's logical expression
 
 ### Group Expressions
 
-Groups evaluate user attributes sent by client applications:
+Groups use **JMESPath expressions** to evaluate user attributes sent by client applications. JMESPath provides a safe, standardized query language for JSON data.
 
-```ruby
-# Users with company email
-email.ends_with? "@company.com"
+```javascript
+// Users with company email
+ends_with(email, '@company.com')
 
-# Admin users
-username.starts_with? "admin_"
+// Admin users
+starts_with(username, 'admin_')
 
-# Premium users
-role == "premium"
+// Premium users
+role == 'premium'
 
-# Users from specific country
-country == "US"
+// Users from specific countries
+contains(['US', 'CA'], country)
 
-# Subscription type
-subscription == "pro"
+// Subscription type
+subscription == 'pro'
 
-# Specific IDs
-id.in? [1, 2, 3, 4, 5]
+// Specific IDs
+contains([1, 2, 3, 4, 5], id)
+
+// Combined conditions
+email && role == 'premium'
+
+// Negation
+role != 'basic'
 ```
+
+**Security Features:**
+- ✅ **Safe evaluation** - No code execution risks
+- ✅ **Input validation** - Expressions are validated before saving
+- ✅ **Standardized syntax** - Uses JMESPath specification
+- ✅ **Error handling** - Invalid expressions fail safely
 
 **Important:** Groups evaluate attributes provided by the client application via the API. The client application must send all attributes necessary for group evaluation.
 
@@ -173,18 +204,18 @@ id.in? [1, 2, 3, 4, 5]
 ### Data Models
 
 - **User** : Users with authentication and roles
-- **Flag** : Feature flags with name, description and variants
+- **Flag** : Feature flags with name and description
 - **Rule** : Activation rules attached to flags
-- **Group** : User groups with logical definitions
+- **Group** : User groups with secure JMESPath expressions
+- **GroupExpressionValidator** : Validates JMESPath expressions for security
 
 ### Evaluation Service
 
 The `FlagEvaluationService` evaluates flags with this logic:
 
-1. **Kill switch** : If a `boolean: off` rule exists, disable immediately
+1. **Kill switch** : If flag is globally disabled, return false immediately
 2. **Rule order** : Evaluate rules in creation order
 3. **First applicable rule** : First matching rule determines the result
-4. **Variant selection** : Uses deterministic hashing to choose variant
 
 ### Security
 
@@ -192,6 +223,8 @@ The `FlagEvaluationService` evaluates flags with this logic:
 - CSRF protection enabled
 - Input data validation
 - Role-based authorization
+- **JMESPath expression evaluation** - Safe, standardized query language without code execution risks
+- **Expression validation** - Pre-validation of group expressions before storage
 
 ## How It Works as an External Service
 
@@ -208,7 +241,7 @@ class DashboardController < ApplicationController
   def show
     flag_result = evaluate_feature_flag('new_dashboard', current_user)
 
-    if flag_result['enabled'] && flag_result['variant'] == 'new'
+    if flag_result['enabled']
       render 'dashboard/new_version'
     else
       render 'dashboard/old_version'
@@ -241,16 +274,14 @@ end
 
 1. **Client Request** : Your application sends user attributes to the API
 2. **Rule Evaluation** : Service evaluates rules against user attributes
-3. **Variant Selection** : Deterministic hashing selects variant for consistent experience
-4. **Response** : Service returns flag status, variant, and evaluation context
+3. **Response** : Service returns flag status and evaluation context
 
 ### Benefits
 
 - **Centralized Control** : Manage all feature flags from one place
 - **Real-time Updates** : Changes take effect immediately across all applications
-- **Consistent Experience** : Same user always gets same variant (deterministic)
-- **A/B Testing** : Built-in support for multiple variants with weights
-- **Kill Switch** : Instantly disable features across all applications
+- **Consistent Experience** : Same user always gets same result (deterministic)
+- **Kill Switch** : Instantly disable features across all applications with global flag toggle
 
 ## Testing
 

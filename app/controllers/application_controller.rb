@@ -3,7 +3,9 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   before_action :authenticate_user!
-  helper_method :current_user, :user_signed_in?, :admin_user?
+  before_action :set_locale
+  before_action :set_theme
+  helper_method :current_user, :user_signed_in?, :admin_user?, :current_theme, :current_locale
 
   private
 
@@ -25,5 +27,21 @@ class ApplicationController < ActionController::Base
 
   def require_admin!
     redirect_to root_path unless admin_user?
+  end
+
+  def set_locale
+    I18n.locale = session[:locale] || I18n.default_locale
+  end
+
+  def set_theme
+    @current_theme = session[:theme] || "light"
+  end
+
+  def current_theme
+    @current_theme
+  end
+
+  def current_locale
+    I18n.locale
   end
 end

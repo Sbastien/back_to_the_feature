@@ -28,4 +28,134 @@
 #       enabled: "ON"
 
 en:
-  hello: "Hello world"
+  # Navigation
+  nav:
+    title: "🚀 Back to the Feature"
+    feature_flags: "Feature Flags"
+    groups: "Groups"
+    users: "Users"
+    logout: "Logout"
+    change_language: "Change language"
+    toggle_theme: "Toggle theme"
+
+  # Authentication
+  auth:
+    login: "Login"
+    register: "Register"
+    username: "Username"
+    password: "Password"
+    login_button: "Sign In"
+    register_button: "Create Account"
+    logout_confirm: "Are you sure you want to logout?"
+
+  # Common
+  common:
+    administrator: "Administrator"
+    current_user: "Current User"
+    actions: "Actions"
+    created: "Created"
+    role: "Role"
+    user: "User"
+    admin: "Admin"
+    delete: "Delete"
+    edit: "Edit"
+    save: "Save"
+    cancel: "Cancel"
+    confirm: "Are you sure?"
+    loading: "Loading..."
+    error: "An error occurred"
+    success: "Operation completed successfully"
+
+  # Feature Flags
+  flags:
+    title: "Feature Flag Management"
+    description: "Control and monitor feature releases across environments"
+    total_flags: "Total Flags"
+    active_flags: "Active Flags"
+    environments: "Environments"
+    new_flag: "New Feature Flag"
+    flag_name: "Flag Name"
+    description: "Description"
+    enabled: "Enabled"
+    disabled: "Disabled"
+    rules: "Rules"
+    no_flags: "No feature flags found"
+    get_started: "Get started by creating your first feature flag"
+
+  # Groups
+  groups:
+    title: "Group Management"
+    description: "Organize users and manage access control"
+    total_groups: "Total Groups"
+    members: "Members"
+    new_group: "New Group"
+    group_name: "Group Name"
+    no_groups: "No groups found"
+    get_started: "Get started by creating your first group"
+
+  # Users
+  users:
+    title: "User Management"
+    description: "Manage user accounts, roles, and permissions"
+    total_users: "Total Users"
+    admin_users: "Admin Users"
+    regular_users: "Regular Users"
+    all_users: "All Users"
+    cannot_delete_self: "Cannot delete yourself"
+    delete_confirm: "Are you sure you want to delete %{username}? This action cannot be undone."
+    role_admin_self: "Admin (You)"
+    admin_access: "Admin Access"
+    powered_by: "User management powered by secure role-based access control"
+
+  # Time
+  time:
+    ago: "ago"
+
+  # Date and time translations (Rails standard)
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: "about 1 hour"
+        other: "about %{count} hours"
+      about_x_months:
+        one: "about 1 month"
+        other: "about %{count} months"
+      about_x_years:
+        one: "about 1 year"
+        other: "about %{count} years"
+      almost_x_years:
+        one: "almost 1 year"
+        other: "almost %{count} years"
+      half_a_minute: "half a minute"
+      less_than_x_minutes:
+        one: "less than a minute"
+        other: "less than %{count} minutes"
+      less_than_x_seconds:
+        one: "less than 1 second"
+        other: "less than %{count} seconds"
+      over_x_years:
+        one: "over 1 year"
+        other: "over %{count} years"
+      x_days:
+        one: "1 day"
+        other: "%{count} days"
+      x_minutes:
+        one: "1 minute"
+        other: "%{count} minutes"
+      x_months:
+        one: "1 month"
+        other: "%{count} months"
+      x_seconds:
+        one: "1 second"
+        other: "%{count} seconds"
+      x_years:
+        one: "1 year"
+        other: "%{count} years"
+
+  # Flash messages
+  flash:
+    admin_role_protection: "Cannot remove your own admin role."
+    theme_updated: "Theme updated successfully"
+    locale_updated: "Language updated successfully"
+    user_updated: "User updated successfully"
+    user_deleted: "User deleted successfully"

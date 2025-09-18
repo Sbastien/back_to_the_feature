@@ -1,6 +1,6 @@
 class Api::V1::RulesController < Api::V1::BaseController
   before_action :set_flag
-  before_action :set_rule, only: [:update, :destroy]
+  before_action :set_rule, only: [ :update, :destroy ]
 
   def index
     render json: @flag.rules.ordered

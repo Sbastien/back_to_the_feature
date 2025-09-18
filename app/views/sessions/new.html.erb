@@ -1,39 +1,112 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        Sign in to Feature Flags
-      </h2>
-    </div>
-    <%= form_with url: login_path, method: :post, local: true, class: "mt-8 space-y-6" do |form| %>
-      <div class="rounded-md shadow-sm -space-y-px">
-        <div>
-          <%= form.label :username, "Username", class: "sr-only" %>
-          <%= form.text_field :username,
-                              placeholder: "Username",
-                              required: true,
-                              class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+<div style="min-height: 100vh; background: linear-gradient(135deg, var(--color-neutral-700), var(--color-neutral-800)); display: flex; align-items: center; justify-content: center; padding: var(--spacing-12) var(--spacing-4);">
+  <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.2);"></div>
+
+  <div style="position: relative; width: 100%; max-width: 28rem;">
+    <!-- Modern Login Card -->
+    <div class="glass-effect animate-fade-in" style="border-radius: var(--radius-xl); padding: var(--spacing-8); box-shadow: var(--shadow-lg);">
+      <!-- Header -->
+      <div style="text-align: center; margin-bottom: var(--spacing-8);">
+        <div class="flex-center" style="width: 4rem; height: 4rem; background: linear-gradient(135deg, var(--color-neutral-600), var(--color-neutral-700)); border-radius: var(--radius-xl); margin: 0 auto var(--spacing-4) auto; transform: rotate(3deg);">
+          <span style="font-size: var(--font-size-2xl);">🚀</span>
         </div>
-        <div>
-          <%= form.label :password, "Password", class: "sr-only" %>
-          <%= form.password_field :password,
-                                  placeholder: "Password",
+        <h2 class="text-shadow" style="font-size: var(--font-size-3xl); font-weight: 700; color: white; margin: 0 0 var(--spacing-2) 0;">
+          <%= t('auth.welcome_back', default: 'Welcome Back!') %>
+        </h2>
+        <p style="color: rgba(255,255,255,0.8); margin: 0;">
+          <%= t('auth.login_description', default: 'Sign in to manage your feature flags') %>
+        </p>
+      </div>
+
+      <!-- Login Form -->
+      <%= form_with url: login_path, method: :post, local: true, style: "display: flex; flex-direction: column; gap: var(--spacing-6);" do |form| %>
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-4);">
+          <!-- Username Field -->
+          <div class="form-group">
+            <%= form.label :username, t('auth.username', default: 'Username'),
+                           class: "form-label",
+                           style: "color: white;" %>
+            <div class="input-icon">
+              <svg class="icon" style="color: rgba(255,255,255,0.5);" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+              </svg>
+              <%= form.text_field :username,
+                                  placeholder: t('auth.username_placeholder', default: 'Enter your username'),
                                   required: true,
-                                  class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+                                  class: "form-input",
+                                  style: "border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: white;" %>
+            </div>
+          </div>
+
+          <!-- Password Field -->
+          <div class="form-group">
+            <%= form.label :password, t('auth.password', default: 'Password'),
+                           class: "form-label",
+                           style: "color: white;" %>
+            <div class="input-icon">
+              <svg class="icon" style="color: rgba(255,255,255,0.5);" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+              </svg>
+              <%= form.password_field :password,
+                                      placeholder: t('auth.password_placeholder', default: 'Enter your password'),
+                                      required: true,
+                                      class: "form-input",
+                                      style: "border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); color: white;" %>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sign In Button -->
+        <div style="padding-top: var(--spacing-4);">
+          <%= form.submit t('auth.sign_in', default: 'Sign In'),
+                          class: "btn animate-scale",
+                          style: "width: 100%; justify-content: center; color: var(--color-neutral-700); background: white; border-color: transparent;" %>
+        </div>
+
+        <!-- Sign Up Link -->
+        <div style="text-align: center; padding-top: var(--spacing-4);">
+          <span style="color: rgba(255,255,255,0.8);">
+            <%= t('auth.no_account', default: "Don't have an account?") %>
+            <%= link_to register_path,
+                       style: "font-weight: 500; color: white; text-decoration: none; transition: var(--transition-fast);" do %>
+              <span style="border-bottom: 1px solid rgba(255,255,255,0.5); transition: var(--transition-fast);">
+                <%= t('auth.sign_up_here', default: 'Sign up here') %>
+              </span>
+            <% end %>
+          </span>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div style="margin-top: var(--spacing-6); padding: var(--spacing-4); background: rgba(255,255,255,0.1); border-radius: var(--radius-lg); border: 1px solid rgba(255,255,255,0.2);">
+          <p style="font-size: var(--font-size-xs); color: rgba(255,255,255,0.8); text-align: center; margin: 0;">
+            <strong><%= t('auth.demo_credentials', default: 'Demo credentials') %>:</strong><br>
+            <%= t('auth.demo_info', default: 'Username: admin | Password: password') %>
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Feature Highlights -->
+    <div style="margin-top: var(--spacing-8); text-align: center;">
+      <div class="flex-center gap-6" style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm);">
+        <div class="flex-start" style="gap: var(--spacing-1);">
+          <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+          </svg>
+          <span><%= t('features.secure', default: 'Secure') %></span>
+        </div>
+        <div class="flex-start" style="gap: var(--spacing-1);">
+          <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+          </svg>
+          <span><%= t('features.fast', default: 'Fast') %></span>
+        </div>
+        <div class="flex-start" style="gap: var(--spacing-1);">
+          <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" clip-rule="evenodd"/>
+          </svg>
+          <span><%= t('features.reliable', default: 'Reliable') %></span>
         </div>
       </div>
-
-      <div>
-        <%= form.submit "Sign in",
-                        class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-      </div>
-
-      <div class="text-center">
-        <span class="text-sm text-gray-600">
-          Don't have an account?
-          <%= link_to "Sign up", register_path, class: "font-medium text-indigo-600 hover:text-indigo-500" %>
-        </span>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

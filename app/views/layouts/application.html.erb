@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="h-full <%= current_theme %>" data-theme="<%= current_theme %>">
   <head>
     <title><%= content_for(:title) || "Back To The Feature" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -20,41 +20,1117 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <style>
+      /* ===========================================
+         DESIGN SYSTEM - FEATURE FLAGS APP
+         =========================================== */
+
+      /* CSS CUSTOM PROPERTIES (Design Tokens) */
+      :root {
+        /* Color Palette - Professional Blue-Gray */
+        --color-neutral-50: #f8fafc;
+        --color-neutral-100: #f1f5f9;
+        --color-neutral-200: #e2e8f0;
+        --color-neutral-300: #cbd5e1;
+        --color-neutral-400: #94a3b8;
+        --color-neutral-500: #64748b;
+        --color-neutral-600: #475569;
+        --color-neutral-700: #334155;
+        --color-neutral-800: #1e293b;
+        --color-neutral-900: #0f172a;
+
+        /* Primary Colors - Blue */
+        --color-primary-50: #eff6ff;
+        --color-primary-100: #dbeafe;
+        --color-primary-200: #bfdbfe;
+        --color-primary-300: #93c5fd;
+        --color-primary-400: #60a5fa;
+        --color-primary-500: #3b82f6;
+        --color-primary-600: #2563eb;
+        --color-primary-700: #1d4ed8;
+        --color-primary-800: #1e40af;
+        --color-primary-900: #1e3a8a;
+
+        /* Success Colors - Green */
+        --color-success-50: #f0fdf4;
+        --color-success-100: #dcfce7;
+        --color-success-500: #22c55e;
+        --color-success-600: #16a34a;
+
+        /* Warning Colors - Amber */
+        --color-warning-50: #fffbeb;
+        --color-warning-100: #fef3c7;
+        --color-warning-500: #f59e0b;
+        --color-warning-600: #d97706;
+
+        /* Error Colors - Red */
+        --color-error-50: #fef2f2;
+        --color-error-100: #fee2e2;
+        --color-error-500: #ef4444;
+        --color-error-600: #dc2626;
+
+        /* Typography */
+        --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.875rem;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.125rem;
+        --font-size-xl: 1.25rem;
+        --font-size-2xl: 1.5rem;
+        --font-size-3xl: 1.875rem;
+
+        /* Spacing */
+        --spacing-1: 0.25rem;
+        --spacing-2: 0.5rem;
+        --spacing-3: 0.75rem;
+        --spacing-4: 1rem;
+        --spacing-5: 1.25rem;
+        --spacing-6: 1.5rem;
+        --spacing-8: 2rem;
+        --spacing-12: 3rem;
+        --spacing-16: 4rem;
+
+        /* Border Radius */
+        --radius-sm: 0.375rem;
+        --radius-md: 0.5rem;
+        --radius-lg: 0.75rem;
+        --radius-xl: 1rem;
+
+        /* Shadows */
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        /* Z-index Scale */
+        --z-dropdown: 1000;
+        --z-sticky: 1020;
+        --z-fixed: 1030;
+        --z-modal: 1040;
+        --z-tooltip: 1050;
+
+        /* Transitions */
+        --transition-fast: 0.15s ease;
+        --transition-normal: 0.25s ease;
+        --transition-slow: 0.35s ease;
+      }
+
+      /* DARK THEME OVERRIDES */
+      :root.dark {
+        --color-neutral-50: #0f172a;
+        --color-neutral-100: #1e293b;
+        --color-neutral-200: #334155;
+        --color-neutral-300: #475569;
+        --color-neutral-400: #64748b;
+        --color-neutral-500: #94a3b8;
+        --color-neutral-600: #cbd5e1;
+        --color-neutral-700: #e2e8f0;
+        --color-neutral-800: #f1f5f9;
+        --color-neutral-900: #f8fafc;
+      }
+
+      /* RESET AND BASE STYLES */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: var(--font-family-sans);
+        line-height: 1.6;
+        color: var(--color-neutral-700);
+        background: var(--color-neutral-50);
+        margin: 0;
+        padding: 0;
+      }
+
+      /* UTILITY CLASSES */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+
+      /* COMPONENT STYLES */
+
+      /* Navigation */
+      .app-nav {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--color-neutral-200);
+        position: sticky;
+        top: 0;
+        z-index: var(--z-sticky);
+        transition: var(--transition-normal);
+      }
+
+      .nav-brand {
+        font-size: var(--font-size-xl);
+        font-weight: 700;
+        color: var(--color-neutral-800);
+        text-decoration: none;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2);
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-600);
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        transition: var(--transition-fast);
+        white-space: nowrap;
+      }
+
+      .nav-link:hover {
+        color: var(--color-primary-600);
+        background: var(--color-primary-50);
+      }
+
+      .nav-link.active {
+        color: var(--color-primary-700);
+        background: var(--color-primary-100);
+      }
+
+      .nav-icon {
+        width: 1rem;
+        height: 1rem;
+        flex-shrink: 0;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-2);
+        padding: var(--spacing-2) var(--spacing-4);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        line-height: 1.5;
+        border: 1px solid transparent;
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: var(--transition-fast);
+        text-decoration: none;
+        user-select: none;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-primary {
+        color: white;
+        background: var(--color-primary-600);
+        border-color: var(--color-primary-600);
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background: var(--color-primary-700);
+        border-color: var(--color-primary-700);
+      }
+
+      .btn-secondary {
+        color: var(--color-neutral-700);
+        background: var(--color-neutral-100);
+        border-color: var(--color-neutral-300);
+      }
+
+      .btn-secondary:hover:not(:disabled) {
+        background: var(--color-neutral-200);
+      }
+
+      .btn-ghost {
+        color: var(--color-neutral-600);
+        background: transparent;
+      }
+
+      .btn-ghost:hover:not(:disabled) {
+        color: var(--color-neutral-700);
+        background: var(--color-neutral-100);
+      }
+
+      .btn-sm {
+        padding: var(--spacing-1) var(--spacing-3);
+        font-size: var(--font-size-xs);
+      }
+
+      /* Cards */
+      .card {
+        background: white;
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-normal);
+      }
+
+      .card:hover {
+        box-shadow: var(--shadow-md);
+      }
+
+      .card-header {
+        padding: var(--spacing-6);
+        border-bottom: 1px solid var(--color-neutral-200);
+      }
+
+      .card-body {
+        padding: var(--spacing-6);
+      }
+
+      .card-title {
+        font-size: var(--font-size-lg);
+        font-weight: 600;
+        color: var(--color-neutral-800);
+        margin: 0 0 var(--spacing-2) 0;
+      }
+
+      .card-description {
+        color: var(--color-neutral-600);
+        margin: 0;
+      }
+
+      /* Stats Cards */
+      .stat-card {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-4);
+        padding: var(--spacing-6);
+        background: white;
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .stat-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        background: var(--color-primary-100);
+        border-radius: var(--radius-lg);
+        color: var(--color-primary-600);
+      }
+
+      .stat-content h3 {
+        font-size: var(--font-size-2xl);
+        font-weight: 700;
+        color: var(--color-neutral-800);
+        margin: 0;
+      }
+
+      .stat-content p {
+        font-size: var(--font-size-sm);
+        color: var(--color-neutral-600);
+        margin: var(--spacing-1) 0 0 0;
+      }
+
+      /* Theme Toggle */
+      .theme-toggle {
+        position: relative;
+        width: 3rem;
+        height: 1.5rem;
+        background: var(--color-neutral-300);
+        border: none;
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: var(--transition-normal);
+        outline: none;
+      }
+
+      .theme-toggle::before {
+        content: '';
+        position: absolute;
+        top: 0.125rem;
+        left: 0.125rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        background: white;
+        border-radius: 50%;
+        transition: var(--transition-normal);
+        box-shadow: var(--shadow-sm);
+      }
+
+      :root.dark .theme-toggle {
+        background: var(--color-primary-600);
+      }
+
+      :root.dark .theme-toggle::before {
+        transform: translateX(1.5rem);
+        background: var(--color-primary-100);
+      }
+
+      /* Language Toggle */
+      .language-toggle {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2);
+        padding: var(--spacing-2) var(--spacing-3);
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-600);
+        background: transparent;
+        border: 1px solid var(--color-neutral-300);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: var(--transition-fast);
+      }
+
+      .language-toggle:hover {
+        color: var(--color-primary-600);
+        border-color: var(--color-primary-300);
+        background: var(--color-primary-50);
+      }
+
+      /* Tables */
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--font-size-sm);
+      }
+
+      .table th {
+        padding: var(--spacing-3) var(--spacing-4);
+        text-align: left;
+        font-weight: 500;
+        color: var(--color-neutral-700);
+        background: var(--color-neutral-50);
+        border-bottom: 1px solid var(--color-neutral-200);
+      }
+
+      .table td {
+        padding: var(--spacing-4);
+        border-bottom: 1px solid var(--color-neutral-200);
+      }
+
+      .table tbody tr:hover {
+        background: var(--color-neutral-50);
+      }
+
+      /* Avatar */
+      .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        font-size: var(--font-size-sm);
+        font-weight: 600;
+        color: white;
+        background: var(--color-primary-600);
+        border-radius: 50%;
+      }
+
+      /* Badge */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-1);
+        padding: var(--spacing-1) var(--spacing-2);
+        font-size: var(--font-size-xs);
+        font-weight: 500;
+        border-radius: var(--radius-sm);
+        max-width: 110px; /* Fixed max width to prevent overflow */
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
+      }
+
+      .badge-primary {
+        color: var(--color-primary-700);
+        background: var(--color-primary-100);
+      }
+
+      .badge-success {
+        color: var(--color-success-600);
+        background: var(--color-success-100);
+      }
+
+      /* Flash Messages */
+      .flash {
+        position: fixed;
+        top: var(--spacing-4);
+        right: var(--spacing-4);
+        max-width: 24rem;
+        padding: var(--spacing-4);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        z-index: var(--z-fixed);
+        animation: slideIn var(--transition-normal);
+      }
+
+      .flash-success {
+        color: var(--color-success-600);
+        background: var(--color-success-50);
+        border: 1px solid var(--color-success-200);
+      }
+
+      .flash-error {
+        color: var(--color-error-600);
+        background: var(--color-error-50);
+        border: 1px solid var(--color-error-200);
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+
+      /* FORM COMPONENTS */
+      .form-group {
+        margin-bottom: var(--spacing-6);
+      }
+
+      .form-label {
+        display: block;
+        font-size: var(--font-size-sm);
+        font-weight: 500;
+        color: var(--color-neutral-700);
+        margin-bottom: var(--spacing-2);
+      }
+
+      .form-input,
+      .form-textarea,
+      .form-select {
+        display: block;
+        width: 100%;
+        padding: var(--spacing-3) var(--spacing-4);
+        font-size: var(--font-size-sm);
+        border: 1px solid var(--color-neutral-300);
+        border-radius: var(--radius-lg);
+        background: white;
+        transition: var(--transition-fast);
+      }
+
+      .form-input:focus,
+      .form-textarea:focus,
+      .form-select:focus {
+        outline: none;
+        border-color: var(--color-primary-500);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .form-input.error,
+      .form-textarea.error,
+      .form-select.error {
+        border-color: var(--color-error-500);
+      }
+
+      .form-input.error:focus,
+      .form-textarea.error:focus,
+      .form-select.error:focus {
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+      }
+
+      .input-icon {
+        position: relative;
+      }
+
+      .input-icon input {
+        padding-left: 2.75rem;
+      }
+
+      .input-icon .icon {
+        position: absolute;
+        left: var(--spacing-3);
+        top: 50%;
+        transform: translateY(-50%);
+        width: 1.25rem;
+        height: 1.25rem;
+        color: var(--color-neutral-400);
+        pointer-events: none;
+      }
+
+      .form-error {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-2);
+        margin-top: var(--spacing-2);
+        font-size: var(--font-size-xs);
+        color: var(--color-error-600);
+      }
+
+      .form-help {
+        margin-top: var(--spacing-1);
+        font-size: var(--font-size-xs);
+        color: var(--color-neutral-500);
+      }
+
+      /* ENHANCED CARDS */
+      .gradient-header {
+        background: linear-gradient(135deg, var(--color-neutral-800) 0%, var(--color-neutral-700) 100%);
+        color: white;
+        padding: var(--spacing-8);
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .gradient-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+
+      .glass-effect {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: var(--spacing-6);
+      }
+
+      .feature-card {
+        background: white;
+        border: 1px solid var(--color-neutral-200);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        transition: var(--transition-normal);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .feature-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+      }
+
+      .feature-card-body {
+        padding: var(--spacing-6);
+      }
+
+      .feature-card-actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--spacing-4) var(--spacing-6);
+        background: var(--color-neutral-50);
+        border-top: 1px solid var(--color-neutral-200);
+      }
+
+      /* LAYOUT UTILITIES */
+      .page-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-4);
+      }
+
+      .page-header {
+        margin-bottom: var(--spacing-8);
+      }
+
+      .section-spacing {
+        margin-bottom: var(--spacing-8);
+      }
+
+      /* Enhanced section spacing */
+      .page-container > * + * {
+        margin-top: var(--spacing-8);
+      }
+
+      .page-container > .page-header {
+        margin-top: 0;
+      }
+
+      /* Additional spacing for main content sections */
+      .main-section {
+        margin-bottom: var(--spacing-8);
+      }
+
+      .feature-grid,
+      .main-section {
+        margin-bottom: var(--spacing-8);
+      }
+
+      .flex-between {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--spacing-2);
+      }
+
+      .flex-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .flex-start {
+        display: flex;
+        align-items: center;
+      }
+
+      .gap-2 { gap: var(--spacing-2); }
+      .gap-3 { gap: var(--spacing-3); }
+      .gap-4 { gap: var(--spacing-4); }
+      .gap-6 { gap: var(--spacing-6); }
+
+      /* TEXT UTILITIES */
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      /* ENHANCED ANIMATIONS */
+      .animate-fade-in {
+        animation: fadeIn var(--transition-normal);
+      }
+
+      .animate-slide-up {
+        animation: slideUp var(--transition-normal);
+      }
+
+      .animate-scale {
+        transition: transform var(--transition-fast);
+      }
+
+      .animate-scale:hover {
+        transform: scale(1.02);
+      }
+
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(1rem);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* KEYBOARD NAVIGATION ENHANCEMENTS */
+      body.keyboard-navigation *:focus {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+      }
+
+      .btn:focus-visible,
+      .nav-link:focus-visible {
+        outline: 2px solid var(--color-primary-500);
+        outline-offset: 2px;
+      }
+
+      .form-input:focus-visible,
+      .form-textarea:focus-visible,
+      .form-select:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+      }
+
+      /* RESPONSIVE DESIGN */
+      @media (max-width: 1200px) {
+        .feature-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 1024px) {
+        .feature-grid {
+          grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+        }
+      }
+
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+
+        .page-container {
+          padding: 0 var(--spacing-3);
+        }
+
+        .card-header,
+        .card-body,
+        .feature-card-body {
+          padding: var(--spacing-4);
+        }
+
+        .stat-card {
+          padding: var(--spacing-4);
+        }
+
+        .gradient-header {
+          padding: var(--spacing-6);
+        }
+
+        .feature-grid {
+          grid-template-columns: 1fr;
+          gap: var(--spacing-4);
+        }
+
+        .flex-between {
+          flex-direction: column;
+          align-items: stretch;
+          gap: var(--spacing-4);
+        }
+
+        /* Fix for feature card header on mobile */
+        .feature-card .flex-between {
+          flex-direction: row !important;
+          align-items: flex-start !important;
+          gap: var(--spacing-3) !important;
+        }
+
+        /* Ensure badge doesn't overflow */
+        .feature-card .flex-between > div:first-child {
+          flex: 1;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .feature-card .flex-between > div:last-child {
+          flex-shrink: 0;
+          max-width: 120px; /* Limit badge container width */
+        }
+
+        .feature-card h3 {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .gap-6 {
+          gap: var(--spacing-3);
+        }
+
+        .feature-card-actions {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .feature-card-actions > div {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: var(--spacing-2);
+        }
+
+        .feature-card-actions > .btn {
+          grid-column: 1 / -1;
+          justify-self: stretch;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --spacing-4: 0.75rem;
+          --spacing-6: 1rem;
+          --spacing-8: 1.5rem;
+        }
+
+        .page-container {
+          padding: 0 var(--spacing-2);
+        }
+
+        .gradient-header {
+          padding: var(--spacing-4);
+        }
+
+        .card-body,
+        .feature-card-body {
+          padding: var(--spacing-3);
+        }
+
+        .btn {
+          font-size: var(--font-size-xs);
+          padding: var(--spacing-2) var(--spacing-3);
+        }
+
+        .nav-brand {
+          font-size: var(--font-size-lg);
+        }
+
+        .flex-between {
+          gap: var(--spacing-3);
+        }
+
+        /* Extra protection for very small screens */
+        .feature-card .flex-between > div:first-child {
+          max-width: calc(100% - 100px); /* Reserve space for badge */
+        }
+
+        .badge {
+          font-size: 0.625rem; /* Even smaller on mobile */
+          padding: var(--spacing-1) var(--spacing-1-5);
+        }
+      }
+
+      /* PRINT STYLES */
+      @media print {
+        .app-nav,
+        .theme-toggle,
+        .language-toggle,
+        .btn,
+        .flash {
+          display: none !important;
+        }
+
+        .page-container {
+          max-width: none;
+          padding: 0;
+        }
+
+        .card,
+        .feature-card {
+          border: 1px solid #000;
+          break-inside: avoid;
+        }
+
+        .gradient-header {
+          background: #f5f5f5 !important;
+          color: #000 !important;
+        }
+      }
+
+      /* BUTTON FORM FIX */
+      .btn form,
+      form.btn {
+        display: inline-flex;
+        margin: 0;
+      }
+
+      .flex-start > form {
+        display: inline-flex;
+      }
+
+      /* REDUCED MOTION */
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+
+        .animate-fade-in,
+        .animate-slide-up,
+        .animate-scale {
+          animation: none !important;
+        }
+      }
+
+      /* HIGH CONTRAST MODE */
+      @media (prefers-contrast: high) {
+        :root {
+          --color-neutral-50: #ffffff;
+          --color-neutral-100: #f5f5f5;
+          --color-neutral-200: #e0e0e0;
+          --color-neutral-700: #000000;
+          --color-neutral-800: #000000;
+          --color-neutral-900: #000000;
+        }
+
+        .btn,
+        .card,
+        .feature-card {
+          border-width: 2px;
+        }
+      }
+
+      /* DARK THEME COMPONENT OVERRIDES */
+      :root.dark .app-nav {
+        background: rgba(15, 23, 42, 0.95);
+        border-bottom-color: var(--color-neutral-200);
+      }
+
+      :root.dark .card,
+      :root.dark .stat-card,
+      :root.dark .feature-card {
+        background: var(--color-neutral-100);
+        border-color: var(--color-neutral-200);
+      }
+
+      :root.dark .feature-card-actions {
+        background: var(--color-neutral-200);
+        border-color: var(--color-neutral-300);
+      }
+
+      :root.dark .form-input,
+      :root.dark .form-textarea,
+      :root.dark .form-select {
+        background: var(--color-neutral-100);
+        border-color: var(--color-neutral-300);
+        color: var(--color-neutral-800);
+      }
+
+      :root.dark .table th {
+        background: var(--color-neutral-200);
+      }
+
+      :root.dark .table tbody tr:hover {
+        background: var(--color-neutral-200);
+      }
+    </style>
   </head>
 
-  <body class="bg-gray-50">
-    <% if user_signed_in? %>
-      <nav class="bg-white shadow-sm border-b">
+  <body>
+    <div class="min-h-full">
+      <!-- Semantic Navigation -->
+      <nav class="app-nav" role="navigation" aria-label="Main navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
-            <div class="flex">
-              <div class="flex space-x-8">
-                <%= link_to "Feature Flags", root_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-900 #{'border-b-2 border-indigo-500' if current_page?(root_path)}" %>
-                <%= link_to "Groups", groups_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 #{'border-b-2 border-indigo-500 text-gray-900' if current_page?(groups_path)}" %>
-                <% if admin_user? %>
-                  <%= link_to "Users", admin_users_path, class: "inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-700 #{'border-b-2 border-indigo-500 text-gray-900' if current_page?(admin_users_path)}" %>
-                <% end %>
-              </div>
-            </div>
-            <div class="flex items-center space-x-4">
-              <span class="text-sm text-gray-700">Welcome, <%= current_user.username %></span>
-              <% if admin_user? %>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">Admin</span>
+          <div class="flex justify-between items-center h-16">
+            <!-- Brand -->
+            <div class="flex items-center gap-8">
+              <h1 class="nav-brand">
+                <%= t('nav.title') %>
+              </h1>
+
+              <% if user_signed_in? %>
+                <!-- Main Navigation Links -->
+                <div class="hidden md:flex gap-2">
+                  <%= link_to root_path, class: "nav-link #{ current_page?(root_path) ? 'active' : '' }",
+                             role: "menuitem" do %>
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                    <span><%= t('nav.feature_flags') %></span>
+                  <% end %>
+
+                  <%= link_to groups_path, class: "nav-link #{ current_page?(groups_path) ? 'active' : '' }",
+                             role: "menuitem" do %>
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                    </svg>
+                    <span><%= t('nav.groups') %></span>
+                  <% end %>
+
+                  <% if admin_user? %>
+                    <%= link_to admin_users_path, class: "nav-link #{ current_page?(admin_users_path) ? 'active' : '' }",
+                               role: "menuitem" do %>
+                      <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                      </svg>
+                      <span><%= t('nav.users') %></span>
+                    <% end %>
+                  <% end %>
+                </div>
               <% end %>
-              <%= link_to "Logout", logout_path, class: "text-sm text-gray-500 hover:text-gray-700" %>
+            </div>
+
+            <!-- User Controls -->
+            <div class="flex items-center gap-4">
+              <!-- Language Switcher -->
+              <button id="language-toggle" class="language-toggle" type="button"
+                      title="<%= t('nav.change_language') %>"
+                      aria-label="<%= t('nav.change_language') %>">
+                <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M7 2a1 1 0 011 1v1h3a1 1 0 110 2H9.578a18.87 18.87 0 01-1.724 4.78c.29.354.596.696.914 1.026a1 1 0 11-1.44 1.389c-.188-.196-.373-.396-.554-.6a19.098 19.098 0 01-3.107 3.567 1 1 0 01-1.334-1.49 17.087 17.087 0 003.13-3.733 18.992 18.992 0 01-1.487-2.494 1 1 0 111.79-.89c.234.47.489.928.764 1.372.417-.934.752-1.913.997-2.927H3a1 1 0 110-2h3V3a1 1 0 011-1zm6 6a1 1 0 01.894.553l2.991 5.982a.869.869 0 01.02.037l.99 1.98a1 1 0 11-1.79.895L15.383 16h-4.764l-.724 1.447a1 1 0 11-1.788-.894l.99-1.98.019-.038 2.99-5.982A1 1 0 0113 8zm-1.382 6h2.764L13 12.236 11.618 14z" clip-rule="evenodd"/>
+                </svg>
+                <span id="current-language"><%= I18n.locale.upcase %></span>
+              </button>
+
+              <!-- Theme Toggle -->
+              <button id="theme-toggle" class="theme-toggle" type="button"
+                      title="<%= t('nav.toggle_theme') %>"
+                      aria-label="<%= t('nav.toggle_theme') %>">
+                <span class="sr-only">Toggle theme</span>
+              </button>
+
+              <% if user_signed_in? %>
+                <!-- User Profile -->
+                <div class="hidden md:flex items-center gap-3">
+                  <div class="text-right">
+                    <div class="text-sm font-medium text-gray-900"><%= current_user.username %></div>
+                    <% if admin_user? %>
+                      <div class="text-xs text-slate-600 font-semibold"><%= t('common.administrator') %></div>
+                    <% end %>
+                  </div>
+                  <div class="avatar">
+                    <%= current_user.username.first.upcase %>
+                  </div>
+                </div>
+
+                <!-- Logout Button -->
+                <%= link_to logout_path, class: "btn btn-secondary",
+                           role: "button",
+                           data: { confirm: t('auth.logout_confirm') } do %>
+                  <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"/>
+                  </svg>
+                  <%= t('nav.logout') %>
+                <% end %>
+              <% else %>
+                <!-- Auth Links -->
+                <div class="flex items-center gap-3">
+                  <%= link_to login_path, class: "btn btn-ghost" do %>
+                    <%= t('auth.login') %>
+                  <% end %>
+                  <%= link_to register_path, class: "btn btn-primary" do %>
+                    <%= t('auth.register') %>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </div>
         </div>
       </nav>
-    <% end %>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <% flash.each do |type, message| %>
-        <div class="mb-4 rounded-md p-4 <%= type == 'notice' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200' %>">
-          <%= message %>
+      <!-- Main Content -->
+      <main role="main">
+        <!-- Flash Messages -->
+        <% flash.each do |type, message| %>
+          <div class="flash <%= type == 'notice' ? 'flash-success' : 'flash-error' %>" role="alert" aria-live="polite">
+            <div class="flex items-center gap-3">
+              <svg class="nav-icon flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                <% if type == 'notice' %>
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                <% else %>
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                <% end %>
+              </svg>
+              <span class="font-medium"><%= message %></span>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+          <%= yield %>
         </div>
-      <% end %>
-      <%= yield %>
-    </main>
+      </main>
+    </div>
+
+    <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
   </body>
 </html>

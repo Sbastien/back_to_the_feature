@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :authenticate_user!, only: [:new, :create, :register, :register_user]
+  skip_before_action :authenticate_user!, only: [ :new, :create, :register, :register_user ]
 
   def new
     redirect_to root_path if user_signed_in?

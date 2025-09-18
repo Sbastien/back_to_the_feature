@@ -22,6 +22,9 @@ gem "jbuilder"
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 gem "bcrypt", "~> 3.1.7"
 
+# JMESPath for safe expression evaluation [https://github.com/jmespath/jmespath.rb]
+gem "jmespath"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
@@ -64,5 +67,5 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "rspec-rails", "~> 8.0", groups: [:development, :test]
-gem "factory_bot_rails", groups: [:development, :test]
+gem "rspec-rails", "~> 8.0", groups: [ :development, :test ]
+gem "factory_bot_rails", groups: [ :development, :test ]

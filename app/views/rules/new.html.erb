@@ -1,23 +1,43 @@
-<div class="px-4 sm:px-6 lg:px-8">
-  <div class="md:flex md:items-center md:justify-between">
-    <div class="flex-1 min-w-0">
-      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
-        Add Rule to <%= @flag.name %>
-      </h2>
+<div class="page-container" style="max-width: 64rem;">
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="gradient-header animate-fade-in">
+      <div class="flex-between">
+        <div>
+          <h1 class="text-shadow" style="font-size: var(--font-size-3xl); font-weight: 700; margin: 0; margin-bottom: var(--spacing-2);">
+            ⚙️ <%= t('rules.add_rule', default: 'Add Rule to') %> <%= @flag.name %>
+          </h1>
+          <p style="margin: 0; opacity: 0.9;">
+            <%= t('rules.add_description', default: 'Configure a new rule to control how this feature flag behaves') %>
+          </p>
+        </div>
+        <div style="flex-shrink: 0;">
+          <div class="flex-center" style="width: 4rem; height: 4rem; background: rgba(255,255,255,0.2); border-radius: var(--radius-xl); transform: rotate(3deg);">
+            <svg style="width: 2rem; height: 2rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="mt-8">
-    <%= form_with model: [@flag, @rule], local: true, class: "space-y-6" do |form| %>
-      <% if @rule.errors.any? %>
-        <div class="rounded-md bg-red-50 p-4">
-          <div class="flex">
-            <div class="ml-3">
-              <h3 class="text-sm font-medium text-red-800">
-                There were errors with your submission:
+  <%= form_with model: [@flag, @rule], local: true, class: "animate-fade-in", style: "display: flex; flex-direction: column; gap: var(--spacing-8);", data: { controller: "rule-form" } do |form| %>
+    <% if @rule.errors.any? %>
+      <div class="card" style="background: var(--color-error-50); border-color: var(--color-error-200);">
+        <div class="card-body" style="padding: var(--spacing-6);">
+          <div class="flex-start">
+            <div style="flex-shrink: 0;">
+              <svg style="width: 1.25rem; height: 1.25rem; color: var(--color-error-500);" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <div style="margin-left: var(--spacing-3);">
+              <h3 style="font-size: var(--font-size-sm); font-weight: 500; color: var(--color-error-700); margin: 0; margin-bottom: var(--spacing-2);">
+                <%= t('errors.form_errors', default: 'There were errors with your submission:') %>
               </h3>
-              <div class="mt-2 text-sm text-red-700">
-                <ul class="list-disc pl-5 space-y-1">
+              <div style="font-size: var(--font-size-sm); color: var(--color-error-600);">
+                <ul style="list-style: disc; padding-left: var(--spacing-5); margin: 0; display: flex; flex-direction: column; gap: var(--spacing-1);">
                   <% @rule.errors.full_messages.each do |message| %>
                     <li><%= message %></li>
                   <% end %>
@@ -26,104 +46,99 @@
             </div>
           </div>
         </div>
-      <% end %>
+      </div>
+    <% end %>
 
-      <div class="bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-          <div class="md:col-span-1">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Rule Configuration</h3>
-            <p class="mt-1 text-sm text-gray-500">
-              Choose the type of rule and configure its value.
-            </p>
+    <!-- Rule Configuration Card -->
+    <div class="card animate-slide-up">
+      <div class="card-body">
+        <div class="flex-start" style="margin-bottom: var(--spacing-6);">
+          <div class="flex-center" style="width: 2.5rem; height: 2.5rem; background: linear-gradient(135deg, var(--color-neutral-600), var(--color-neutral-700)); border-radius: var(--radius-lg); margin-right: var(--spacing-4);">
+            <svg style="width: 1.25rem; height: 1.25rem; color: white;" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+            </svg>
           </div>
-          <div class="mt-5 md:mt-0 md:col-span-2">
-            <div class="grid grid-cols-6 gap-6">
-              <div class="col-span-6">
-                <%= form.label :type, class: "block text-sm font-medium text-gray-700" %>
-                <%= form.select :type,
-                    options_for_select([
-                      ["Boolean (On/Off)", "boolean"],
-                      ["Percentage of Actors", "percentage_of_actors"],
-                      ["Group", "group"]
-                    ], @rule.type),
-                    { prompt: "Select rule type" },
-                    { class: "mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm",
-                      onchange: "toggleValueField()" } %>
+          <div>
+            <h3 class="card-title"><%= t('rules.rule_configuration', default: 'Rule Configuration') %></h3>
+            <p class="card-description"><%= t('rules.configuration_desc', default: 'Choose the type of rule and configure its value') %></p>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: var(--spacing-6);">
+          <div class="form-group">
+            <%= form.label :type, t('rules.rule_type', default: 'Rule Type'), class: "form-label" %>
+            <%= form.select :type,
+                options_for_select([
+                  [t('rules.percentage_type', default: 'Percentage of Actors'), "percentage_of_actors"],
+                  [t('rules.group_type', default: 'Group'), "group"]
+                ], @rule.type),
+                { prompt: t('rules.select_type', default: 'Select rule type') },
+                { class: "form-select #{@rule.errors[:type].any? ? 'error' : ''}",
+                  data: { "rule-form-target": "type", action: "change->rule-form#showValueField" } } %>
+            <% if @rule.errors[:type].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @rule.errors[:type].first %>
               </div>
+            <% end %>
+          </div>
 
-              <div class="col-span-6">
-                <%= form.label :value, class: "block text-sm font-medium text-gray-700" %>
+          <div class="form-group">
+            <%= form.label :value, t('rules.rule_value', default: 'Rule Value'), class: "form-label" %>
 
-                <!-- Boolean value -->
-                <div id="boolean-value" class="mt-1" style="display: none;">
-                  <%= form.select :value,
-                      options_for_select([["On", "on"], ["Off", "off"]], @rule.value),
-                      { prompt: "Select on or off" },
-                      { class: "block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" } %>
-                </div>
 
-                <!-- Percentage value -->
-                <div id="percentage-value" class="mt-1" style="display: none;">
-                  <%= form.number_field :value,
-                      placeholder: "Enter percentage (0-100)",
-                      min: 0, max: 100,
-                      class: "block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" %>
-                  <p class="mt-2 text-sm text-gray-500">Percentage of users who will see this flag (0-100)</p>
-                </div>
-
-                <!-- Group value -->
-                <div id="group-value" class="mt-1" style="display: none;">
-                  <%= form.select :value,
-                      options_from_collection_for_select(Group.all, :name, :name, @rule.value),
-                      { prompt: "Select a group" },
-                      { class: "block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" } %>
-                  <p class="mt-2 text-sm text-gray-500">
-                    Users matching the selected group will see this flag.
-                    <%= link_to "Manage groups", groups_path, class: "text-indigo-600 hover:text-indigo-500" %>
-                  </p>
-                </div>
+            <!-- Percentage value -->
+            <div data-rule-form-target="percentageValue" style="display: none;">
+              <%= form.number_field :value,
+                  placeholder: t('rules.percentage_placeholder', default: 'Enter percentage (0-100)'),
+                  min: 0, max: 100,
+                  class: "form-input #{@rule.errors[:value].any? ? 'error' : ''}",
+                  data: { "rule-form-target": "percentageInput" } %>
+              <div class="form-help">
+                <%= t('rules.percentage_help', default: 'Percentage of users who will see this flag (0-100)') %>
               </div>
             </div>
+
+            <!-- Group value -->
+            <div data-rule-form-target="groupValue" style="display: none;">
+              <%= form.select :value,
+                  options_from_collection_for_select(Group.all, :name, :name, @rule.value),
+                  { prompt: t('rules.select_group', default: 'Select a group') },
+                  { class: "form-select #{@rule.errors[:value].any? ? 'error' : ''}",
+                    data: { "rule-form-target": "groupInput" } } %>
+              <div class="form-help">
+                <%= t('rules.group_help', default: 'Users matching the selected group will see this flag.') %>
+                <%= link_to t('rules.manage_groups', default: 'Manage groups'), groups_path, style: "color: var(--color-primary-600); text-decoration: underline;" %>
+              </div>
+            </div>
+
+            <% if @rule.errors[:value].any? %>
+              <div class="form-error">
+                <svg style="width: 1rem; height: 1rem;" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                <%= @rule.errors[:value].first %>
+              </div>
+            <% end %>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="flex justify-end space-x-3">
-        <%= link_to "Cancel", @flag, class: "bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-        <%= form.submit "Create Rule", class: "ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
-      </div>
-    <% end %>
-  </div>
+    <!-- Action Buttons -->
+    <div class="flex-between animate-slide-up" style="padding-top: var(--spacing-6);">
+      <%= link_to @flag, class: "btn btn-secondary animate-scale" do %>
+        <svg class="nav-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0L2.586 11H9a1 1 0 100-2H2.586l3.707-3.707a1 1 0 00-1.414-1.414l-5.414 5.414a1 1 0 000 1.414l5.414 5.414a1 1 0 001.414 0z" clip-rule="evenodd"/>
+        </svg>
+        <%= t('common.cancel', default: 'Cancel') %>
+      <% end %>
+
+      <%= form.submit t('rules.create_rule', default: 'Create Rule'),
+                      class: "btn btn-primary animate-scale" %>
+    </div>
+  <% end %>
 </div>
 
-<script>
-function toggleValueField() {
-  const typeSelect = document.querySelector('#rule_type');
-  const booleanValue = document.querySelector('#boolean-value');
-  const percentageValue = document.querySelector('#percentage-value');
-  const groupValue = document.querySelector('#group-value');
-
-  // Hide all value fields
-  booleanValue.style.display = 'none';
-  percentageValue.style.display = 'none';
-  groupValue.style.display = 'none';
-
-  // Show the appropriate field based on type
-  switch(typeSelect.value) {
-    case 'boolean':
-      booleanValue.style.display = 'block';
-      break;
-    case 'percentage_of_actors':
-      percentageValue.style.display = 'block';
-      break;
-    case 'group':
-      groupValue.style.display = 'block';
-      break;
-  }
-}
-
-// Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-  toggleValueField();
-});
-</script>
